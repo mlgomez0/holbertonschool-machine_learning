@@ -14,6 +14,17 @@ def matrix_shape(matrix):
         dimensions.append(len_matrix)
     return dimensions
 
+
+def sum_arrays(arr1, arr2):
+    arr_sum = []
+    for i in range(len(arr1)):
+        arr_sum.append(arr1[i] + arr2[i])
+    return arr_sum
+
+
+added_matrix = []
+
+
 def add_matrices(mat1, mat2):
     """returns new matrix"""
     shape1 = matrix_shape(mat1)
@@ -22,4 +33,8 @@ def add_matrices(mat1, mat2):
         if shape1[i] != shape2[i] or len(shape1) != len(shape2):
             return None
 
-    return (np.add(mat1, mat2))
+    if type(mat1[0]) == list:
+        added_matrix.append(add_matrices(mat1[0], mat2[0]))
+    else:
+        return sum_arrays(mat1, mat2)
+    return added_matrix
