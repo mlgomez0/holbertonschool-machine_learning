@@ -33,8 +33,12 @@ def add_matrices(mat1, mat2):
         if shape1[i] != shape2[i] or len(shape1) != len(shape2):
             return None
 
+
     if type(mat1[0]) == list:
-        added_matrix.append(add_matrices(mat1[0], mat2[0]))
+        for i in range(len(mat1)):
+            added_matrix.append(add_matrices(mat1[i], mat2[i]))
+
     else:
         return sum_arrays(mat1, mat2)
+
     return added_matrix
