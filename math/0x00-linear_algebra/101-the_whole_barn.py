@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """adds two matrices"""
-import numpy as np
 
 
 def matrix_shape(matrix):
@@ -15,30 +14,37 @@ def matrix_shape(matrix):
     return dimensions
 
 
-def sum_arrays(arr1, arr2):
-    arr_sum = []
+def add_arrays(arr1, arr2):
+    """returns a list or none"""
+    addition = []
+    if len(arr1) != len(arr2):
+        return None
     for i in range(len(arr1)):
-        arr_sum.append(arr1[i] + arr2[i])
-    return arr_sum
+        addition.append(arr1[i] + arr2[i])
+    return addition
 
 
-added_matrix = []
+def add_matrices2D(mat1, mat2):
+    """returns a matrix or none"""
+    addition = []
+    if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
+        return None
+    m = [[mat1[i][j] + mat2[i][j] for j in range(len(
+        mat2[0]))] for i in range(len(mat2))]
+    return m
 
 
 def add_matrices(mat1, mat2):
     """returns new matrix"""
     shape1 = matrix_shape(mat1)
     shape2 = matrix_shape(mat2)
-    for i in range(len(shape1)):
-        if shape1[i] != shape2[i] or len(shape1) != len(shape2):
-            return None
-
-
-    if type(mat1[0]) == list:
-        for i in range(len(mat1)):
-            added_matrix.append(add_matrices(mat1[i], mat2[i]))
-
-    else:
-        return sum_arrays(mat1, mat2)
-
+    if shape1 != shape2:
+        return None
+    if type(mat1[0]) != list:
+        return add_arrays(mat1, mat2)
+    if len(matrix_shape(mat1)) == 2:
+        return add_matrices2D(mat1, mat2)
+    added_matrix = []
+    for i in range(len(mat1)):
+        added_matrix.append(add_matrices(mat1[i], mat2[i]))
     return added_matrix
