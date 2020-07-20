@@ -42,7 +42,7 @@ def add_matrices(mat1, mat2):
         return None
     if type(mat1[0]) != list:
         return add_arrays(mat1, mat2)
-    if len(matrix_shape(mat1)) == 2:
+    if len(shape1) == 2:
         return add_matrices2D(mat1, mat2)
     added_matrix = []
     for i in range(len(mat1)):
