@@ -8,8 +8,7 @@ def poly_derivative(poly):
     i = 1
     if poly is None:
         return None
-    if type(poly) != list or len(poly) == 0 or poly[
-            0] == 0 or poly[len(poly) - 1] == 0:
+    if type(poly) != list or len(poly) == 0:
         return None
     if len(poly) == 1:
         return [0]
