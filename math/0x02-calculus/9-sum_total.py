@@ -8,4 +8,6 @@ def summation_i_squared(n):
         return None
     if n == 0:
         return 1
+    if n < 0:
+        n = n * -1
     return int((n * (n + 1) * (2 * n + 1)) / 6)
