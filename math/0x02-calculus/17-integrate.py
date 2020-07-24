@@ -9,6 +9,8 @@ def poly_integral(poly, C=0):
 
     if type(poly) != list or len(poly) == 0 or type(C) != int:
         return None
+    if poly == [0]:
+        return [0]
     inte.append(C)
     if len(poly) == 1:
         inte.append(poly[0])
