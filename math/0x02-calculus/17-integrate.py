@@ -15,6 +15,6 @@ def poly_integral(poly, C=0):
         if poly[i] % (i + 1) == 0:
             inte.append(int(poly[i]/(i + 1)))
         else:
-            inte.append(round((poly[i]/(i + 1)), 2))
+            inte.append(poly[i]/(i + 1))
         i += 1
     return inte
