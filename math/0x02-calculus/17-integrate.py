@@ -6,8 +6,7 @@ def poly_integral(poly, C=0):
     """returns a list with coefficients"""
     inte = []
     i = 0
-    if type(poly) != list or len(poly) == 0 or poly[
-            0] == 0 or poly[len(poly) - 1] == 0 or type(C) != int:
+    if type(poly) != list or len(poly) == 0 or type(C) != int:
         return None
     if len(poly) == 1:
         return poly
