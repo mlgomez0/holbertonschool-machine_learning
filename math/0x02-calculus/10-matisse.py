@@ -6,6 +6,8 @@ def poly_derivative(poly):
     """returns a list with the derivative coefficients"""
     deriv = []
     i = 1
+    if poly == None:
+        return None
     if type(poly) != list or len(poly) == 0 or poly[
             0] == 0 or poly[len(poly) - 1] == 0:
         return None
