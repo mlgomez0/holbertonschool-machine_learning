@@ -1,4 +1,4 @@
-##0x03. Probability
+# 0x03. Probability
 
 ## Concepts
 
@@ -14,7 +14,7 @@
 - What is mean, standard deviation, and variance?
 - Common probability distributions
 
-##Installation
+## Installation
 Files were interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
 Files were executed with numpy (version 1.15) and matplotlib (version 3.0)
 
