@@ -28,7 +28,9 @@ class Poisson:
         if k != 0:
             for i in range(1, k + 1):
                 factorial_k = factorial_k * i
-        return ((2.7182818285**(-(self.lambtha)))*(self.lambtha**(k))) / factorial_k
+        return ((2.7182818285**(-(self.lambtha)))*(
+            self.lambtha**(k))) / factorial_k
+
     def cdf(self, k):
         """calculates the CDF given a number of successes: k"""
         if k < 0:
