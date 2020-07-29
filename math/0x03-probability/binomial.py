@@ -25,7 +25,7 @@ class Binomial:
                     sum_x = sum_x + (data[i] - ux)**2
                 var_x = sum_x / len(data)
                 P = 1 - (var_x / ux)
-                self.n = round(ux / P)
+                self.n = int(round(ux / P))
                 self.p = ux / self.n
 
     def pmf(self, k):
