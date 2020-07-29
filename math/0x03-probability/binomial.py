@@ -8,7 +8,7 @@ class Binomial:
         if data is None:
             if n <= 0:
                 raise ValueError("n must be a positive value")
-            elif p >= 1 or p <= 0:
+            elif p >= 1 or p < 0:
                 return ValueError("p must be greater than 0 and less than 1")
             else:
                 self.n = int(n)
