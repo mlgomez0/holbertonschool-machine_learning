@@ -20,7 +20,7 @@ class Binomial:
                 raise ValueError("data must contain multiple values")
             else:
                 sum_x = 0
-                ux = sum(data) / len(data)
+                ux = sum(data) / int(len(data))
                 for i in range(0, len(data)):
                     sum_x = sum_x + (data[i] - ux)**2
                 var_x = sum_x / len(data)
