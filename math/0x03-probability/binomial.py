@@ -45,7 +45,8 @@ class Binomial:
             factorial_n = factorial_n * j
         for l in range(1, n - k + 1):
             factorial_n_k = factorial_n_k * l
-        return (factorial_n / (factorial_k * factorial_n_k)) * (self.p**k) * ((1 - self.p)**(self.n - k))
+        return (factorial_n / (factorial_k * factorial_n_k)) * (
+            self.p**k) * ((1 - self.p)**(self.n - k))
 
     def cdf(self, k):
         """calculates the CDF given a number of successes: k"""
