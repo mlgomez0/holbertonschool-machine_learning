@@ -8,7 +8,7 @@ class Binomial:
         if data is None:
             if n <= 0:
                 raise ValueError("n must be a positive value")
-            elif p > 1 or p < 0:
+            elif p >= 1 or p <= 0:
                 return ValueError("p must be greater than 0 and less than 1")
             else:
                 self.n = int(n)
@@ -16,7 +16,7 @@ class Binomial:
         else:
             if type(data) != list:
                 raise TypeError("data must be a list")
-            elif len(data) < 2:
+            elif len(data) <= 2:
                 raise ValueError("data must contain multiple values")
             else:
                 sum_x = 0
