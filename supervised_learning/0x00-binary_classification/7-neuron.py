@@ -74,11 +74,7 @@ class Neuron:
             if i != iterations:
                 self.gradient_descent(X, Y, self.__A, alpha)
                 self.forward_prop(X)
-        """
-        if verbose == True and i == iterations:
-            print("Cost after {} iterations: {}".format(i, cost))
-            cost_list.append(cost)
-            iter_x.append(i)"""
+
         if graph == True:
             plt.plot(iter_x, cost_list)
             plt.title("Training Cost")
