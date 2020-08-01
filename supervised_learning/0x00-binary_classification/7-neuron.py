@@ -65,19 +65,20 @@ class Neuron:
         self.forward_prop(X)
         cost_list = []
         iter_x = []
-        for i in range(iterations):
+        for i in range(iterations + 1):
             A, cost = self.evaluate(X, Y)
-            if verbose == True and (i % step == 0 or i == 0):
+            if verbose == True and (i % step == 0 or i == 0 or i == iterations):
                 print("Cost after {} iterations: {}".format(i, cost))
                 cost_list.append(cost)
                 iter_x.append(i)
-            self.gradient_descent(X, Y, self.__A, alpha)
-            self.forward_prop(X)
-        A, cost = self.evaluate(X, Y)
+            if i != iterations:
+                self.gradient_descent(X, Y, self.__A, alpha)
+                self.forward_prop(X)
+        """
         if verbose == True and i == iterations:
             print("Cost after {} iterations: {}".format(i, cost))
             cost_list.append(cost)
-            iter_x.append(i)
+            iter_x.append(i)"""
         if graph == True:
             plt.plot(iter_x, cost_list)
             plt.title("Training Cost")
