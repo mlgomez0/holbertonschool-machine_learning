@@ -65,7 +65,7 @@ class NeuralNetwork:
         dz2 = A2 - Y
         dw2 = (1 / len(Y[0])) * np.matmul(dz2, A1.T)
         db2 = (1 / len(Y[0])) * np.sum(dz2, axis=1, keepdims=True)
-        dz1 = np.matmul(self.__W2, dz2) * A1
+        dz1 =  np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
         dw1 = (1 / len(Y[0])) * np.matmul(dz1, X.T)
         db1 = (1 / len(Y[0])) * np.sum(dz1, axis=1, keepdims=True)
         self.__W1 = self.__W1 - alpha * dw1
