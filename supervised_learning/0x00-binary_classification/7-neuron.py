@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class Neuron:
     """defines single neuron for Binary Classification"""
     def __init__(self, nx):
@@ -48,7 +49,8 @@ class Neuron:
         self.__W = self.__W - alpha * dw
         self.__b = self.__b - alpha * db
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000,
+              alpha=0.05, verbose=True, graph=True, step=100):
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:
@@ -57,7 +59,7 @@ class Neuron:
             raise TypeError("alpha must be a float")
         if alpha < 0:
             raise ValueError("alpha must be positive")
-        if verbose == True or graph == True:
+        if verbose is True or graph is True:
             if type(step) != int:
                 raise TypeError("step must be an integer")
             if step < 0 or step > iterations:
@@ -67,7 +69,8 @@ class Neuron:
         iter_x = []
         for i in range(iterations + 1):
             A, cost = self.evaluate(X, Y)
-            if verbose == True and (i % step == 0 or i == 0 or i == iterations):
+            if verbose is True and (
+                    i % step == 0 or i == 0 or i == iterations):
                 print("Cost after {} iterations: {}".format(i, cost))
                 cost_list.append(cost)
                 iter_x.append(i)
@@ -75,7 +78,7 @@ class Neuron:
                 self.gradient_descent(X, Y, self.__A, alpha)
                 self.forward_prop(X)
 
-        if graph == True:
+        if graph is True:
             plt.plot(iter_x, cost_list)
             plt.title("Training Cost")
             plt.xlabel("iteration")

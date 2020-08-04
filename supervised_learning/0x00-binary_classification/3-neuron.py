@@ -32,7 +32,7 @@ class Neuron:
         return self.__A
 
     def cost(self, Y, A):
-        cost_array = np.multiply(np.log(A), Y) + np.multiply((1 - Y), np.log(1.0000001 - A))
+        cost_array = np.multiply(np.log(A), Y) + np.multiply((
+            1 - Y), np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])
         return cost
-

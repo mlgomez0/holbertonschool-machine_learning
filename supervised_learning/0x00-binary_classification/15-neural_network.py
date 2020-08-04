@@ -49,7 +49,7 @@ class NeuralNetwork:
     def forward_prop(self, X):
         Z1 = np.matmul(self.__W1, X) + self.__b1
         self.__A1 = 1 / (1 + np.exp(-Z1))
-        Z2 =  np.matmul(self.__W2, self.__A1) + self.__b2
+        Z2 = np.matmul(self.__W2, self.__A1) + self.__b2
         self.__A2 = 1 / (1 + np.exp(-Z2))
         return (self.__A1, self.__A2)
 
@@ -67,7 +67,7 @@ class NeuralNetwork:
         dz2 = A2 - Y
         dw2 = (1 / len(Y[0])) * np.matmul(dz2, A1.T)
         db2 = (1 / len(Y[0])) * np.sum(dz2, axis=1, keepdims=True)
-        dz1 =  np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
+        dz1 = np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
         dw1 = (1 / len(Y[0])) * np.matmul(dz1, X.T)
         db1 = (1 / len(Y[0])) * np.sum(dz1, axis=1, keepdims=True)
         self.__W1 = self.__W1 - alpha * dw1
@@ -75,7 +75,8 @@ class NeuralNetwork:
         self.__W2 = self.__W2 - alpha * dw2
         self.__b2 = self.__b2 - alpha * db2
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000,
+              alpha=0.05, verbose=True, graph=True, step=100):
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:
@@ -84,7 +85,7 @@ class NeuralNetwork:
             raise TypeError("alpha must be a float")
         if alpha < 0:
             raise ValueError("alpha must be positive")
-        if verbose == True or graph == True:
+        if verbose is True or graph is True:
             if type(step) != int:
                 raise TypeError("step must be an integer")
             if step < 0 or step > iterations:
@@ -94,7 +95,8 @@ class NeuralNetwork:
         iter_x = []
         for i in range(iterations + 1):
             A, cost = self.evaluate(X, Y)
-            if verbose == True and (i % step == 0 or i == 0 or i == iterations):
+            if verbose is True and (
+                    i % step == 0 or i == 0 or i == iterations):
                 print("Cost after {} iterations: {}".format(i, cost))
                 cost_list.append(cost)
                 iter_x.append(i)
@@ -102,7 +104,7 @@ class NeuralNetwork:
                 self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
                 self.forward_prop(X)
 
-        if graph == True:
+        if graph is True:
             plt.plot(iter_x, cost_list)
             plt.title("Training Cost")
             plt.xlabel("iteration")

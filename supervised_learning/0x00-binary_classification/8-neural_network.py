@@ -2,6 +2,7 @@
 """class NeuralNetwork with one hidden layer"""
 import numpy as np
 
+
 class NeuralNetwork:
     """defines single NeuralNetwork for Binary Classification"""
     def __init__(self, nx, nodes):

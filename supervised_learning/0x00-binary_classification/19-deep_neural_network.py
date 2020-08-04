@@ -2,6 +2,7 @@
 """class DeepNeuralNetwork with multiple hidden layer"""
 import numpy as np
 
+
 class DeepNeuralNetwork:
     """defines deep Neural Network for Binary Classification"""
     def __init__(self, nx, layers):
@@ -21,7 +22,8 @@ class DeepNeuralNetwork:
                 raise TypeError("layers must be a list of positive integers")
             w = "W" + str(num_layer)
             b = "b" + str(num_layer)
-            self.__weights[w] = np.random.randn(i, layer_size) * np.sqrt(2/layer_size)
+            self.__weights[w] = np.random.randn(
+                i, layer_size) * np.sqrt(2/layer_size)
             self.__weights[b] = np.zeros((i, 1))
             num_layer += 1
             layer_size = i
@@ -44,11 +46,12 @@ class DeepNeuralNetwork:
             w = "W" + str(i)
             b = "b" + str(i)
             a = "A" + str(i - 1)
-            Z = np.matmul(self.__weights[w], self.__cache[a]) + self.__weights[b]
+            Z = np.matmul(self.__weights[w],
+                          self.__cache[a]) + self.__weights[b]
             a_new = "A" + str(i)
             self.__cache[a_new] = 1 / (1 + np.exp(-Z))
-        l = "A" + str(self.__L)
-        return (self.__cache[l], self.__cache)
+        Act = "A" + str(self.__L)
+        return (self.__cache[Act], self.__cache)
 
     def cost(self, Y, A):
         cost_array = (np.log(A) * Y) + ((1 - Y) * np.log(1.0000001 - A))

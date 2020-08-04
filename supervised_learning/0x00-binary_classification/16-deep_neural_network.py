@@ -2,6 +2,7 @@
 """class DeepNeuralNetwork with multiple hidden layer"""
 import numpy as np
 
+
 class DeepNeuralNetwork:
     """defines deep Neural Network for Binary Classification"""
     def __init__(self, nx, layers):
@@ -21,7 +22,8 @@ class DeepNeuralNetwork:
                 raise TypeError("layers must be a list of positive integers")
             w = "W" + str(num_layer)
             b = "b" + str(num_layer)
-            self.weights[w] = np.random.randn(i, layer_size) * np.sqrt(2/layer_size)
+            self.weights[w] = np.random.randn(
+                i, layer_size) * np.sqrt(2/layer_size)
             self.weights[b] = np.zeros((i, 1))
             num_layer += 1
             layer_size = i
