@@ -46,6 +46,7 @@ class NeuralNetwork:
         return self.__A2
 
     def forward_prop(self, X):
+        """makes forward propagation"""
         Z1 = np.matmul(self.__W1, X) + self.__b1
         self.__A1 = 1 / (1 + np.exp(-Z1))
         Z2 = np.matmul(self.__W2, self.__A1) + self.__b2
@@ -53,16 +54,19 @@ class NeuralNetwork:
         return (self.__A1, self.__A2)
 
     def cost(self, Y, A):
+        """makes cost calculation"""
         cost_array = (np.log(A) * Y) + ((1 - Y) * np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])
         return cost
 
     def evaluate(self, X, Y):
+        """returns activation and cost"""
         self.forward_prop(X)
         cost_r = self.cost(Y, self.__A2)
         return (np.where(self.__A2 >= 0.5, 1, 0), cost_r)
 
     def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
+        """performs gradient descent"""
         dz2 = A2 - Y
         dw2 = (1 / len(Y[0])) * np.matmul(dz2, A1.T)
         db2 = (1 / len(Y[0])) * np.sum(dz2, axis=1, keepdims=True)
@@ -75,6 +79,7 @@ class NeuralNetwork:
         self.__b2 = self.__b2 - alpha * db2
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
+        """trains the model"""
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:

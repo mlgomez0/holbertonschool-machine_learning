@@ -27,21 +27,25 @@ class Neuron:
         return self.__A
 
     def forward_prop(self, X):
+        """makes forward propagation"""
         Z = np.matmul(self.__W, X) + self.__b
         self.__A = 1 / (1 + np.exp(-Z))
         return self.__A
 
     def cost(self, Y, A):
+        """makes cost calculation"""
         cost_array = (np.log(A) * Y) + ((1 - Y) * np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])
         return cost
 
     def evaluate(self, X, Y):
+        """returns activation and cost"""
         self.forward_prop(X)
         cost_r = self.cost(Y, self.__A)
         return (np.where(self.__A >= 0.5, 1, 0), cost_r)
 
     def gradient_descent(self, X, Y, A, alpha=0.05):
+        """performs gradient descent"""
         dz = A - Y
         dw = (1 / len(Y[0])) * np.matmul(dz, X.T)
         db = (1 / len(Y[0])) * np.sum(dz)
@@ -49,6 +53,7 @@ class Neuron:
         self.__b = self.__b - alpha * db
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
+        """trains the model"""
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:

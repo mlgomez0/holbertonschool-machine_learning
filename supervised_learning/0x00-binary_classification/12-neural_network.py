@@ -46,6 +46,7 @@ class NeuralNetwork:
         return self.__A2
 
     def forward_prop(self, X):
+        """makes forward propagation"""
         Z1 = np.matmul(self.__W1, X) + self.__b1
         self.__A1 = 1 / (1 + np.exp(-Z1))
         Z2 = np.matmul(self.__W2, self.__A1) + self.__b2
@@ -53,11 +54,13 @@ class NeuralNetwork:
         return (self.__A1, self.__A2)
 
     def cost(self, Y, A):
+        """makes cost calculation"""
         cost_array = (np.log(A) * Y) + ((1 - Y) * np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])
         return cost
 
     def evaluate(self, X, Y):
+        """returns activation and cost"""
         self.forward_prop(X)
         cost_r = self.cost(Y, self.__A2)
         return (np.where(self.__A2 >= 0.5, 1, 0), cost_r)

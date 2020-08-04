@@ -27,11 +27,13 @@ class Neuron:
         return self.__A
 
     def forward_prop(self, X):
+        """makes forward propagation"""
         Z = np.matmul(self.__W, X) + self.__b
         self.__A = 1 / (1 + np.exp(-Z))
         return self.__A
 
     def cost(self, Y, A):
+        """makes cost calculation"""
         cost_array = np.multiply(np.log(A), Y) + np.multiply((
             1 - Y), np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])

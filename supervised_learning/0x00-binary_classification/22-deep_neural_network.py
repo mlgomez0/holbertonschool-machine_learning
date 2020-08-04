@@ -41,6 +41,7 @@ class DeepNeuralNetwork:
         return self.__weights
 
     def forward_prop(self, X):
+        """makes forward propagation"""
         self.__cache["A0"] = X
         for i in range(1, self.__L + 1):
             w = "W" + str(i)
@@ -54,16 +55,19 @@ class DeepNeuralNetwork:
         return (self.__cache[Act], self.__cache)
 
     def cost(self, Y, A):
+        """makes cost calculation"""
         cost_array = (np.log(A) * Y) + ((1 - Y) * np.log(1.0000001 - A))
         cost = -np.sum(cost_array) / len(A[0])
         return cost
 
     def evaluate(self, X, Y):
+        """returns activation and cost"""
         A, _ = self.forward_prop(X)
         cost_r = self.cost(Y, A)
         return (np.where(A >= 0.5, 1, 0), cost_r)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
+        """performs gradient descent"""
         da = -(Y/cache["A" + str(self.__L)]) + ((
                1 - Y)/(1 - cache["A" + str(self.__L)]))
         for i in range(self.__L, 0, -1):
@@ -79,6 +83,7 @@ class DeepNeuralNetwork:
             da = np.matmul(self.__weights[w].T, dz)
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
+        """trains the model"""
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:
