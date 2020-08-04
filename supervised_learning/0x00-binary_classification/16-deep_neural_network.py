@@ -18,7 +18,7 @@ class DeepNeuralNetwork:
         num_layer = 1
         layer_size = nx
         for i in layers:
-            if type(i) != int or i < 0:
+            if type(i) != int or i <= 0:
                 raise TypeError("layers must be a list of positive integers")
             w = "W" + str(num_layer)
             b = "b" + str(num_layer)
