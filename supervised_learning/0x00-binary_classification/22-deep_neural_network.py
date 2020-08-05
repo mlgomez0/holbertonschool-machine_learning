@@ -10,7 +10,7 @@ class DeepNeuralNetwork:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        if type(layers) != list:
+        if type(layers) != list or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
         self.__L = len(layers)
         self.__cache = {}
@@ -68,19 +68,17 @@ class DeepNeuralNetwork:
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """performs gradient descent"""
-        da = -(Y/cache["A" + str(self.__L)]) + ((
-               1 - Y)/(1 - cache["A" + str(self.__L)]))
+        weights_copy = self.__weights.copy()
+        dz = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
-            Al = "A" + str(i)
-            dz = da * (cache[Al] * (1 - cache[Al]))
-            Al_ = "A" + str(i - 1)
-            dw = (1 / len(Y[0])) * np.matmul(dz, cache[Al_].T)
+            A = cache["A" + str(i - 1)]
+            dw = (1 / len(Y[0])) * np.matmul(dz, A.T)
             db = (1 / len(Y[0])) * np.sum(dz, axis=1, keepdims=True)
             w = "W" + str(i)
             b = "b" + str(i)
             self.__weights[w] = self.__weights[w] - alpha * dw
             self.__weights[b] = self.__weights[b] - alpha * db
-            da = np.matmul(self.__weights[w].T, dz)
+            dz = np.matmul(weights_copy["W" + str(i)].T, dz) * (A * (1 - A))
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
         """trains the model"""
