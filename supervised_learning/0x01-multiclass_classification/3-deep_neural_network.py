@@ -134,12 +134,9 @@ class DeepNeuralNetwork:
         with open(filename, 'wb') as fileObject:
             pickle.dump(self, fileObject)
 
-
     def load(filename):
         """Loads a pickled DeepNeuralNetwork object"""
-        try:
-            file_object = open(filename, 'rb')
+        with open(filename, 'rb') as file_object:
             b = pickle.load(file_object)
             return b
-        except:
-            return None
+        return None
