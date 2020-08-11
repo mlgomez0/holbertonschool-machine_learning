@@ -5,13 +5,9 @@
 
 import numpy as np
 
+
 def one_hot_decode(one_hot):
     """returns vector of labels"""
-    try:
-        return np.argmax(one_hot, axis=0)
-    except:
+    if len(one_hot) == 0:
         return None
-
-
-
-
+    return np.argmax(one_hot, axis=0)
