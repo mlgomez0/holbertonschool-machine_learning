@@ -15,12 +15,13 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha, i
     x_valid, y_valid = create_placeholders(X_train.shape[0], Y_train.shape[0])
     y_pred = forward_prop(x_train, layer_sizes, activations)
     y_valid = forward_prop(x_valid, layer_sizes, activations)
-    
+
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
             for i in range(iterations + 1):
                 at = calculate_accuracy(y_train, y_pred)
                 av = calculate_accuracy(Y_valid, y_pred)
                 if i % 100 == 0 or i == 0 or i == iterations):
-                    print("After {} iterations:\tTraining Cost: {}\tTraining Accuracy: {}\tValidation Cost: {}\tValidation Accuracy: {}".format(i, ))
-        
+                    print("After {} iterations:\tTraining Cost: {
+                          }\tTraining Accuracy: {}\tValidation Cost: {
+                          }\tValidation Accuracy: {}".format(i, ))
