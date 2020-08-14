@@ -9,12 +9,13 @@ create_train_op = __import__('5-create_train_op').create_train_op
 forward_prop = __import__('2-forward_prop').forward_prop
 
 
-
-def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha, iterations, save_path="/tmp/model.ckpt"):
-    
+def train(X_train, Y_train, X_valid,
+          Y_valid, layer_sizes, activations,
+          alpha, iterations, save_path="/tmp/model.ckpt"):
+    """return path to saved model"""
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
-    y_pred= forward_prop(x, layer_sizes, activations)
-    accuracy = calculate_accuracy(y, y_pred) 
+    y_pred = forward_prop(x, layer_sizes, activations)
+    accuracy = calculate_accuracy(y, y_pred)
     loss = calculate_loss(y, y_pred)
     train_op = create_train_op(loss, alpha)
 
@@ -28,13 +29,13 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha, i
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
         for i in range(iterations + 1):
-            loss_t, accuracy_t = sess.run(fetches=[loss, accuracy], feed_dict={x: X_train, y: Y_train})
-            loss_valid, accuracy_valid = sess.run([loss, accuracy], feed_dict={x: X_valid, y: Y_valid})
+            l_t, a_t = sess.run([loss, accuracy], {x: X_train, y: Y_train})
+            l_v, a_v = sess.run([loss, accuracy], {x: X_valid, y: Y_valid})
             if i % 100 == 0 or i == 0 or i == iterations:
                 print("After {} iterations:".format(i))
-                print("\tTraining Cost: {}".format(loss_t))
-                print("\tTraining Accuracy: {}".format(accuracy_t))
-                print("\tValidation Cost: {}".format(loss_valid))
-                print("\tValidation Accuracy: {}".format(accuracy_valid))
+                print("\tTraining Cost: {}".format(l_t))
+                print("\tTraining Accuracy: {}".format(a_t))
+                print("\tValidation Cost: {}".format(l_v))
+                print("\tValidation Accuracy: {}".format(a_v))
             sess.run(fetches=[train_op], feed_dict={x: X_train, y: Y_train})
         return saver.save(sess, save_path)
