@@ -37,5 +37,6 @@ def train(X_train, Y_train, X_valid,
                 print("\tTraining Accuracy: {}".format(a_t))
                 print("\tValidation Cost: {}".format(l_v))
                 print("\tValidation Accuracy: {}".format(a_v))
-            sess.run(fetches=[train_op], feed_dict={x: X_train, y: Y_train})
+            if i != iterations:
+                sess.run(fetches=[train_op], feed_dict={x: X_train, y: Y_train})
         return saver.save(sess, save_path)

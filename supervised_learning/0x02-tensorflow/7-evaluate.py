@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """evaluates based on a existing model"""
 import tensorflow as tf
-import numpy as np
 
 
 def evaluate(X, Y, save_path):
     """
     returns prediction, accuracy and loss_val
     """
-    saver = tf.train.import_meta_graph('model.ckpt.meta')
+    new_path = save_path + ".meta"
+    saver = tf.train.import_meta_graph(new_path)
     with tf.Session() as sess:
         saver.restore(sess, tf.train.latest_checkpoint('./'))
         x = tf.get_collection("x")[0]
