@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """evaluates based on a existing model"""
 import tensorflow as tf
 
