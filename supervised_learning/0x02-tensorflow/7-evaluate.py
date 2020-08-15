@@ -10,7 +10,7 @@ def evaluate(X, Y, save_path):
     new_path = save_path + ".meta"
     saver = tf.train.import_meta_graph(new_path)
     with tf.Session() as sess:
-        saver.restore(sess, tf.train.latest_checkpoint('./'))
+        saver.restore(sess, save_path)
         x = tf.get_collection("x")[0]
         y = tf.get_collection("y")[0]
         y_pred = tf.get_collection("y_pred")
