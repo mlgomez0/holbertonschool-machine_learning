@@ -29,12 +29,12 @@ def create_layer(prev, n, activation):
 
 def forward_prop(x, layer_sizes=[], activations=[]):
     """makes forward propagation"""
-    A = x
-    for i in range(len(layer_sizes)):
-        if i == len(layer_sizes) - 1:
-            A = create_layer(A, layer_sizes[i], activations[i])
-        else:
+    A = create_batch_norm_layer(x, layer_sizes[0], activations[0])
+    for i in range(1, len(layer_sizes)):
+        if i != len(layer_sizes) - 1:
             A = create_batch_norm_layer(A, layer_sizes[i], activations[i])
+        else:
+            A = create_layer(A, layer_sizes[i], activations[i])
     return A
 
 
