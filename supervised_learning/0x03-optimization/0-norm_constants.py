@@ -2,6 +2,7 @@
 """calculates normalizacion constants"""
 import numpy as np
 
+
 def normalization_constants(X):
     """return normalization constants"""
     m = X.mean(axis=0)
