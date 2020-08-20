@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#!/usr/bin/env python3
 """Model train"""
 import tensorflow as tf
 import numpy as np
@@ -120,9 +121,8 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
                         end = j * batch_size + batch_size
                     b_x = x_t[start:end]
                     b_y = y_t[start:end]
-                    global_ass = global_step.assign(j)
-                    sess.run(global_ass)
-                    sess.run(train_op, {x: b_x, y: b_y})
+                    #sess.run(global_step.assign(j))
+                    sess.run([train_op], {x: b_x, y: b_y})
                     if j != 0 and (j + 1) % 100 == 0:
                         new_c, new_ac = sess.run([loss, accuracy], {x: b_x, y: b_y})
                         print('\tStep {}:'.format(j + 1))
