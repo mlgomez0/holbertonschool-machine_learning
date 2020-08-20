@@ -2,7 +2,9 @@
 """returns moving averages with bias correction"""
 import numpy as np
 
+
 def moving_average(data, beta):
+    """return the moved averages"""
     vp = 0
     weighted = []
     for i in range(len(data)):
