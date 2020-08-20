@@ -23,10 +23,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
         else:
             fl = False
         for i in range(epochs + 1):
-            cos_t, acc_t = sess.run([loss, accuracy],
-                                     {x: X_train, y: Y_train})
-            cos_v, acc_v = sess.run([loss, accuracy],
-                                     {x: X_valid, y: Y_valid})
+            cos_t, acc_t = sess.run([loss, accuracy], {x: X_train, y: Y_train})
+            cos_v, acc_v = sess.run([loss, accuracy], {x: X_valid, y: Y_valid})
             print('After {} epochs:'.format(i))
             print('\tTraining Cost: {}'.format(cos_t))
             print('\tTraining Accuracy: {}'.format(acc_t))
@@ -37,16 +35,16 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
                 for j in range(b_iter):
                     start = j * batch_size
                     if j == b_iter - 1 and fl is True:
-                        end = X_train.shape[0]
+                        final = X_train.shape[0]
                     else:
-                        end = j * batch_size + batch_size
-                    batch_x = x_tr[start:end]
-                    batch_y = y_tr[start:end]
-                    sess.run(train_op, {x: batch_x, y: batch_y})
+                        final = j * batch_size + batch_size
+                    batch_x = x_tr[start:final]
+                    batch_y = y_tr[start:final]
+                    sess.run([train_op], {x: batch_x, y: batch_y})
                     if j != 0 and (j + 1) % 100 == 0:
-                        batch_c, batch_ac = sess.run([loss, accuracy],
-                                                 {x: batch_x, y: batch_y})
+                        batch_co, batch_ac = sess.run([loss, accuracy],
+                                                      {x: batch_x, y: batch_y})
                         print('\tStep {}:'.format(j + 1))
-                        print('\t\tCost: {}'.format(batch_c))
+                        print('\t\tCost: {}'.format(batch_co))
                         print('\t\tAccuracy: {}'.format(batch_ac))
         return saver_n.save(sess, save_path)
