@@ -3,6 +3,7 @@
 """
 import numpy as np
 
+
 def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     """return updated variable, new fist, second moment"""
     Vdw = beta1 * v + (1 - beta1) * grad

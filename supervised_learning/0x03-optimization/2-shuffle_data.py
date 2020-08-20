@@ -2,8 +2,9 @@
 """shuffle two matrices"""
 import numpy as np
 
+
 def shuffle_data(X, Y):
-    b = np.random.permutation(Y)
-    np.random.seed(0)
-    a = np.random.permutation(X)
-    return (a, b)
+    """returns shuffle matrix"""
+    perm = X.shape[0]
+    shuff_op = np.random.permutation(perm)
+    return X[shuff_op], Y[shuff_op]
