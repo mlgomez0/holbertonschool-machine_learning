@@ -88,14 +88,12 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     global_step = tf.Variable(0, trainable=False)
     alpha1 = learning_rate_decay(alpha, decay_rate, global_step, 10)
     train_op = create_Adam_op(loss, alpha1, beta1, beta2, epsilon)
-    """
     tf.add_to_collection('x', x)
     tf.add_to_collection('y', y)
     tf.add_to_collection('y_pred', y_pred)
     tf.add_to_collection('accuracy', accuracy)
     tf.add_to_collection('loss', loss)
     tf.add_to_collection('train_op', train_op)
-    """
     saver = tf.train.Saver()
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
