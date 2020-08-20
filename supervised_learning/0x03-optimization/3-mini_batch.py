@@ -9,15 +9,14 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
                      save_path="/tmp/model.ckpt"):
     """trains performing minibatch gradient descent"""
     with tf.Session() as sess:
-        load_p = load_path + ".meta"
-        saver_n = tf.train.import_meta_graph(load_p)
+        saver_n = tf.train.import_meta_graph(load_path + ".meta")
         saver_n.restore(sess, load_path)
         x = tf.get_collection("x")[0]
         y = tf.get_collection("y")[0]
-        train_op = tf.get_collection("train_op")
-        loss = tf.get_collection("loss")[0]
         accuracy = tf.get_collection("accuracy")[0]
-
+        loss = tf.get_collection("loss")[0]
+        train_op = tf.get_collection("train_op")
+        
         step_next = X_train.shape[0] // batch_size
         if step_next % batch_size != 0:
             step_next = step_next + 1
