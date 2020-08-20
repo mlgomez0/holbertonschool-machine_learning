@@ -2,7 +2,7 @@
 """normalize output of a nn
 """
 import numpy as np
-import tensorflow as tf
+
 
 def batch_norm(Z, gamma, beta, epsilon):
     """"returns normalized z"""
@@ -11,4 +11,3 @@ def batch_norm(Z, gamma, beta, epsilon):
     Znorm = (Z - u) / (s2 + epsilon) ** (1/2)
     Zn = gamma * Znorm + beta
     return Zn
-    
