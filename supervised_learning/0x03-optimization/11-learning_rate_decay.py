@@ -3,7 +3,7 @@
    using inverse time decay
 """
 import numpy as np
-import tensorflow as tf
+
 
 def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
     """"returns updated value for alpha"""
