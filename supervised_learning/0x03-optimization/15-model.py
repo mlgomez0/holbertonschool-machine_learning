@@ -88,7 +88,7 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     accuracy = calculate_accuracy(y, y_pred)
     loss = calculate_loss(y, y_pred)
     global_step = tf.Variable(0, trainable=False)
-    alpha1 = learning_rate_decay(alpha, decay_rate, global_step, 10)
+    alpha1 = learning_rate_decay(alpha, decay_rate, global_step, 1)
     train_op = create_Adam_op(loss, alpha1, beta1, beta2, epsilon)
     tf.add_to_collection('x', x)
     tf.add_to_collection('y', y)
