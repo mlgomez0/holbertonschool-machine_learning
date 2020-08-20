@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """calculates normalizacion constants"""
-
+import numpy as np
 
 def normalization_constants(X):
     """return normalization constants"""
