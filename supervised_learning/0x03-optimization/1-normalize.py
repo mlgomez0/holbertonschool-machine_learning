@@ -3,4 +3,5 @@
 
 
 def normalize(X, m, s):
+    """return normalized X"""
     return (X - m) / s
