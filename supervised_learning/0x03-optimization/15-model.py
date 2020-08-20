@@ -16,6 +16,8 @@ def create_batch_norm_layer(prev, n, activation):
     beta = tf.Variable(tf.constant(0.0, shape=[n]), trainable=True)
     y_norm = tf.nn.batch_normalization(y, mean, variance, offset=beta,
                                        scale=gamma, variance_epsilon=1e-8)
+    if not activation:
+        return y_norm
     return (activation(y_norm))
 
 
