@@ -2,8 +2,8 @@
 """creates training operation
    using gradient descent with momentum
 """
-import numpy as np
 import tensorflow as tf
+
 
 def create_momentum_op(loss, alpha, beta1):
     """tensor with operation"""
