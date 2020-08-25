@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """creates a tensorflow layer that
    includes L2 regularization"""
-import numpy as np
 import tensorflow as tf
 
 
