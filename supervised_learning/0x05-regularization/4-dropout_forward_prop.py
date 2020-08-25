@@ -20,7 +20,6 @@ def dropout_forward_prop(X, weights, L, keep_prob):
         if i != L:
             A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
             true_false_matrix = np.random.rand(A.shape[0], A.shape[1]) < keep_prob
-            #cache[d] = np.multiply(true_false_matrix, np.ones([A.shape[0], A.shape[1]]))
             cache[d] = np.multiply(true_false_matrix, 1)
             a_temp = np.multiply(A, cache[d])
             cache[a_new] = a_temp / keep_prob
