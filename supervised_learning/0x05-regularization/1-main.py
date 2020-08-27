@@ -34,6 +34,7 @@ if __name__ == '__main__':
     cache['A2'] = np.tanh(np.matmul(weights['W2'], cache['A1']) + weights['b2'])
     Z3 = np.matmul(weights['W3'], cache['A2']) + weights['b3']
     cache['A3'] = np.exp(Z3) / np.sum(np.exp(Z3), axis=0)
-    print(weights['W1'])
+    print(weights['W3'])
     l2_reg_gradient_descent(Y_train_oh, weights, cache, 0.1, 0.1, 3)
-    print(weights['W1'])
+    print(weights['W3'])
+    

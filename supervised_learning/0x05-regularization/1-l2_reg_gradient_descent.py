@@ -7,7 +7,6 @@ import numpy as np
 def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     """weights and biases of the network
        should be updated in place"""
-    weights_copy = weights.copy()
     dz = cache["A" + str(L)] - Y
     for i in range(L, 0, -1):
         A = cache["A" + str(i - 1)]
@@ -19,4 +18,4 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
             alpha * lambtha) / len(Y[0]) * weights[w] - alpha * dw
         weights[b] = weights[b] - (
             alpha * lambtha) / len(Y[0]) * weights[b] - alpha * db
-        dz = np.matmul(weights_copy["W" + str(i)].T, dz) * (1 - A * A)
+        dz = np.matmul(weights["W" + str(i)].T, dz) * (1 - A * A)
