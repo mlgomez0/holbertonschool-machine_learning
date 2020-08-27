@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""determines if you should stop 
+"""determines if you should stop
    gradient descent early"""
 
 
