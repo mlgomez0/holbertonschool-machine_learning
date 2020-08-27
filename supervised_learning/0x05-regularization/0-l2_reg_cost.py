@@ -8,7 +8,8 @@ def l2_reg_cost(cost, lambtha, weights, L, m):
     """Returns: the cost of the network
        accounting for L2 regularization"""
     sum_norms = 0
-    for w in weights.values():
+    for i in range(1, L + 1):
+        w = "W" + str(i)
         sum_norms = sum_norms + (np.linalg.norm(w))
 
     return cost + (sum_norms * (lambtha / (2 * m)))
