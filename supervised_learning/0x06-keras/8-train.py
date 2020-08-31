@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 import tensorflow.keras as K
 
-def train_model(network, data, labels, batch_size, epochs, validation_data=None, early_stopping=False, patience=0, learning_rate_decay=False, alpha=0.1, decay_rate=1, verbose=True, shuffle=False):
+def train_model(network, data, labels, batch_size, epochs, validation_data=None, early_stopping=False,
+                patience=0, learning_rate_decay=False, alpha=0.1, decay_rate=1, save_best=False, filepath=None, verbose=True, shuffle=False):
+    call_backs = []
     if validation_data:
         early_stop = K.callbacks.EarlyStopping(monitor='val_loss', mode='min', patience=patience)
-        early_stop = [early_stop]
+        call_backs.append(early_stop)
         if learning_rate_decay == True:
             def scheduler(epoch):
                 return alpha / (1 + decay_rate * epoch)
             lr_decay = K.callbacks.LearningRateScheduler(schedule=scheduler, verbose=1)
-            early_stop.append(lr_decay)
-    else:
-        early_stop = None
+            call_backs.append(lr_decay)
+    if filepath:
+        call_backs.append(K.callbacks.ModelCheckpoint(filepath=filepath, save_best_only=save_best))
+    if len(call_backs) == 0:
+        call_backs = None
+    
     History = network.fit(
                         x=data,
                         y=labels,
@@ -20,5 +25,5 @@ def train_model(network, data, labels, batch_size, epochs, validation_data=None,
                         verbose=verbose,
                         shuffle=shuffle,
                         validation_data=validation_data,
-                        callbacks=early_stop)
+                        callbacks=call_backs)
     return History.history
