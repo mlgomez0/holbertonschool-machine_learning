@@ -1,14 +1,25 @@
-# 0x05. Regularization
+# 0x06. Keras
 
 ## Concepts
 
-- What is regularization? What is its purpose?
-- What is are L1 and L2 regularization? What is the difference between the two methods?
-- What is dropout?
-- What is early stopping?
-- What is data augmentation?
-- How do you implement the above regularization methods in Numpy? Tensorflow?
-- What are the pros and cons of the above regularization methods?
+- What is Keras?
+- What is a model?
+- How to instantiate a model (2 ways)
+- How to build a layer
+- How to add regularization to a layer
+- How to add dropout to a layer
+- How to add batch normalization
+- How to compile a model
+- How to optimize a model
+- How to fit a model
+- How to use validation data
+- How to perform early stopping
+- How to measure accuracy
+- How to evaluate a model
+- How to make a prediction with a model
+- How to access the weights/outputs of a model
+- What is HDF5?
+- How to save and load a model’s weights, a model’s configuration, and the entire model
 
 # Installation
 Files were interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
@@ -21,97 +32,149 @@ Educational purposes
 
 ## Tasks
 
-0. L2 Regularization Cost:0-l2_reg_cost.py
+0. Sequential: 0-sequential.py
 ```
-Write a function def l2_reg_cost(cost, lambtha, weights, L, m): that calculates the cost of a neural network with L2 regularization:
+Write a function def build_model(nx, layers, activations, lambtha, keep_prob): that builds a neural network with the Keras library:
 
-cost is the cost of the network without L2 regularization
-lambtha is the regularization parameter
-weights is a dictionary of the weights and biases (numpy.ndarrays) of the neural network
-L is the number of layers in the neural network
-m is the number of data points used
-Returns: the cost of the network accounting for L2 regularization
-```
-1. Gradient Descent with L2 Regularization: 1-l2_reg_gradient_descent.py
-```
-Write a function def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L): that updates the weights and biases of a neural network using gradient descent with L2 regularization:
-
-Y is a one-hot numpy.ndarray of shape (classes, m) that contains the correct labels for the data
-classes is the number of classes
-m is the number of data points
-weights is a dictionary of the weights and biases of the neural network
-cache is a dictionary of the outputs of each layer of the neural network
-alpha is the learning rate
+nx is the number of input features to the network
+layers is a list containing the number of nodes in each layer of the network
+activations is a list containing the activation functions used for each layer of the network
 lambtha is the L2 regularization parameter
-L is the number of layers of the network
-The neural network uses tanh activations on each layer except the last, which uses a softmax activation
-The weights and biases of the network should be updated in place
+keep_prob is the probability that a node will be kept for dropout
+You are not allowed to use the Input class
+Returns: the keras model
 ```
-2. L2 Regularization Cost: 2-l2_reg_cost.py
+1. Input: 1-input.py
 ```
-Write the function def l2_reg_cost(cost): that calculates the cost of a neural network with L2 regularization:
+Write a function def build_model(nx, layers, activations, lambtha, keep_prob): that builds a neural network with the Keras library:
 
-cost is a tensor containing the cost of the network without L2 regularization
-Returns: a tensor containing the cost of the network accounting for L2 regularization
-```
-3. Create a Layer with L2 Regularization: 3-l2_reg_create_layer.py
-```
-Write a function def l2_reg_create_layer(prev, n, activation, lambtha): that creates a tensorflow layer that includes L2 regularization:
-
-prev is a tensor containing the output of the previous layer
-n is the number of nodes the new layer should contain
-activation is the activation function that should be used on the layer
+nx is the number of input features to the network
+layers is a list containing the number of nodes in each layer of the network
+activations is a list containing the activation functions used for each layer of the network
 lambtha is the L2 regularization parameter
-Returns: the output of the new layer
+keep_prob is the probability that a node will be kept for dropout
+You are not allowed to use the Sequential class
+Returns: the keras model
 ```
-4. Forward Propagation with Dropout: 4-dropout_forward_prop.py
+2. Optimize: 2-optimize.py
 ```
-Write a function def dropout_forward_prop(X, weights, L, keep_prob): that conducts forward propagation using Dropout:
+Write a function def optimize_model(network, alpha, beta1, beta2): that sets up Adam optimization for a keras model with categorical crossentropy loss and accuracy metrics:
 
-X is a numpy.ndarray of shape (nx, m) containing the input data for the network
-nx is the number of input features
-m is the number of data points
-weights is a dictionary of the weights and biases of the neural network
-L the number of layers in the network
-keep_prob is the probability that a node will be kept
-All layers except the last should use the tanh activation function
-The last layer should use the softmax activation function
-Returns: a dictionary containing the outputs of each layer and the dropout mask used on each layer (see example for format)
-```
-5. Gradient Descent with Dropout: 5-dropout_gradient_descent.py
-```
-Write a function def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L): that updates the weights of a neural network with Dropout regularization using gradient descent:
-
-Y is a one-hot numpy.ndarray of shape (classes, m) that contains the correct labels for the data
-classes is the number of classes
-m is the number of data points
-weights is a dictionary of the weights and biases of the neural network
-cache is a dictionary of the outputs and dropout masks of each layer of the neural network
+network is the model to optimize
 alpha is the learning rate
-keep_prob is the probability that a node will be kept
-L is the number of layers of the network
-All layers use thetanh activation function except the last, which uses the softmax activation function
-The weights of the network should be updated in place
+beta1 is the first Adam optimization parameter
+beta2 is the second Adam optimization parameter
+Returns: None
 ```
-6. Create a Layer with Dropout: 6-dropout_create_layer.py
+3. One Hot: 3-one_hot.py
 ```
-Write a function def dropout_create_layer(prev, n, activation, keep_prob): that creates a layer of a neural network using dropout:
+Write a function def one_hot(labels, classes=None): that converts a label vector into a one-hot matrix:
 
-prev is a tensor containing the output of the previous layer
-n is the number of nodes the new layer should contain
-activation is the activation function that should be used on the layer
-keep_prob is the probability that a node will be kept
-Returns: the output of the new layer
+The last dimension of the one-hot matrix must be the number of classes
+Returns: the one-hot matrix
 ```
-7. Early Stopping: 7-early_stopping.py
+4. Train: 4-train.py
 ```
-Write the function def early_stopping(cost, opt_cost, threshold, patience, count): that determines if you should stop gradient descent early:
+Write a function def train_model(network, data, labels, batch_size, epochs, verbose=True, shuffle=False): that trains a model using mini-batch gradient descent:
 
-Early stopping should occur when the validation cost of the network has not decreased relative to the optimal validation cost by more than the threshold over a specific patience count
-cost is the current validation cost of the neural network
-opt_cost is the lowest recorded validation cost of the neural network
-threshold is the threshold used for early stopping
-patience is the patience count used for early stopping
-count is the count of how long the threshold has not been met
-Returns: a boolean of whether the network should be stopped early, followed by the updated count
+network is the model to train
+data is a numpy.ndarray of shape (m, nx) containing the input data
+labels is a one-hot numpy.ndarray of shape (m, classes) containing the labels of data
+batch_size is the size of the batch used for mini-batch gradient descent
+epochs is the number of passes through data for mini-batch gradient descent
+verbose is a boolean that determines if output should be printed during training
+shuffle is a boolean that determines whether to shuffle the batches every epoch. Normally, it is a good idea to shuffle, but for reproducibility, we have chosen to set the default to False.
+Returns: the History object generated after training the model
 ```
+5. Validate: 5-train.py
+```
+Based on 4-train.py, update the function def train_model(network, data, labels, batch_size, epochs, validation_data=None, verbose=True, shuffle=False): to also analyze validaiton data:
+
+validation_data is the data to validate the model with, if not None
+```
+6. Early Stopping: 6-train.py
+```
+Based on 5-train.py, update the function def train_model(network, data, labels, batch_size, epochs, validation_data=None, early_stopping=False, patience=0, verbose=True, shuffle=False): to also train the model using early stopping:
+
+early_stopping is a boolean that indicates whether early stopping should be used
+early stopping should only be performed if validation_data exists
+early stopping should be based on validation loss
+patience is the patience used for early stopping
+```
+7. Learning Rate Decay: 7-train.py
+```
+Based on 6-train.py, update the function def train_model(network, data, labels, batch_size, epochs, validation_data=None, early_stopping=False, patience=0, learning_rate_decay=False, alpha=0.1, decay_rate=1, verbose=True, shuffle=False): to also train the model with learning rate decay:
+
+learning_rate_decay is a boolean that indicates whether learning rate decay should be used
+learning rate decay should only be performed if validation_data exists
+the decay should be performed using inverse time decay
+the learning rate should decay in a stepwise fashion after each epoch
+each time the learning rate updates, Keras should print a message
+alpha is the initial learning rate
+decay_rate is the decay rate
+```
+8. Save Only the Best: 8-train.py
+```
+Based on 7-train.py, update the function def train_model(network, data, labels, batch_size, epochs, validation_data=None, early_stopping=False, patience=0, learning_rate_decay=False, alpha=0.1, decay_rate=1, save_best=False, filepath=None, verbose=True, shuffle=False): to also save the best iteration of the model:
+
+save_best is a boolean indicating whether to save the model after each epoch if it is the best
+a model is considered the best if its validation loss is the lowest that the model has obtained
+filepath is the file path where the model should be saved
+```
+9. Save and Load Model: 9-model.py
+```
+Write the following functions:
+
+def save_model(network, filename): saves an entire model:
+network is the model to save
+filename is the path of the file that the model should be saved to
+Returns: None
+def load_model(filename): loads an entire model:
+filename is the path of the file that the model should be loaded from
+Returns: the loaded model
+```
+10. Save and Load Weights: 10-weights.py
+```
+Write the following functions:
+
+def save_weights(network, filename, save_format='h5'): saves a model’s weights:
+network is the model whose weights should be saved
+filename is the path of the file that the weights should be saved to
+save_format is the format in which the weights should be saved
+Returns: None
+def load_weights(network, filename): loads a model’s weights:
+network is the model to which the weights should be loaded
+filename is the path of the file that the weights should be loaded from
+Returns: None
+``` 
+11. Save and Load Configuration: 11-config.py
+``` 
+Write the following functions:
+
+def save_config(network, filename): saves a model’s configuration in JSON format:
+network is the model whose configuration should be saved
+filename is the path of the file that the configuration should be saved to
+Returns: None
+def load_config(filename): loads a model with a specific configuration:
+filename is the path of the file containing the model’s configuration in JSON format
+Returns: the loaded model
+``` 
+12. Test: 12-test.py
+``` 
+Write a function def test_model(network, data, labels, verbose=True): that tests a neural network:
+
+network is the network model to test
+data is the input data to test the model with
+labels are the correct one-hot labels of data
+verbose is a boolean that determines if output should be printed during the testing process
+Returns: the loss and accuracy of the model with the testing data, respectively
+``` 
+13. Predict: 13-predict.py
+``` 
+Write a function def predict(network, data, verbose=False): that makes a prediction using a neural network:
+
+network is the network model to make the prediction with
+data is the input data to make the prediction with
+verbose is a boolean that determines if output should be printed during the prediction process
+Returns: the prediction for the data
+``` 
