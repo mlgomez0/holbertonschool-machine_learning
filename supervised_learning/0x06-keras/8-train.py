@@ -34,4 +34,4 @@ def train_model(network, data, labels, batch_size, epochs,
                         shuffle=shuffle,
                         validation_data=validation_data,
                         callbacks=call_backs)
-    return History.history
+    return History
