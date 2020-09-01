@@ -3,7 +3,6 @@
 import tensorflow.keras as K
 
 
-
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """Returns: the keras model"""
     inputs = K.Input(shape=(nx,))
