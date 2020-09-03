@@ -9,22 +9,24 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     hk = kernel.shape[0]
     wk = kernel.shape[1]
     m = images.shape[0]
+    hm = images.shape[1]
+    wm = images.shape[2]
+    st1 = stride[1]
+    st0 = stride[0]
     if padding == "valid":
         pad0 = 0
         pad1 = 0
     elif padding == "same":
-        pad0 = int((hk - 1) / 2)
-        pad1 = int((wk - 1) / 2)
+        pad0 = int(((hm - 1) * st0 + hk - hm) / 2) + 1
+        pad1 = int(((wm - 1) * st1 + wk - wm) / 2) + 1
     else:
         pad0 = padding[0]
         pad1 = padding[1]
-    st1 = stride[1]
-    st0 = stride[0]
     out_h = int(floor(float(
-                images.shape[1] + 2 * pad0 - hk) / float(
+                hm + 2 * pad0 - hk) / float(
                 st0))) + 1
     out_w = int(floor(float(
-                images.shape[2] + 2 * pad1 - wk) / float(
+                wm + 2 * pad1 - wk) / float(
                 st1))) + 1
     convoluted = np.zeros((m, out_h, out_w))
     img = np.pad(images, ((0, 0), (pad0, pad0), (pad1, pad1)), 'constant')
