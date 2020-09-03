@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""performs convolution to a matrix"""
+"""performs a valid convolution on
+   grayscale images:"""
 import numpy as np
 
 
 def convolve_grayscale_valid(images, kernel):
-    """returns convoluted"""
+    """returns convoluted images"""
     m = images.shape[0]
     hm = images.shape[1]
     wm = images.shape[2]

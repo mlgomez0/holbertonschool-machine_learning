@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""performs convolution images using pooling"""
+"""performs pooling of images"""
 import numpy as np
 
 
 def pool(images, kernel_shape, stride, mode='max'):
-    """returns convolved matrix"""
+    """returns pooled images"""
     hk = kernel_shape[0]
     wk = kernel_shape[1]
     nc = images.shape[3]

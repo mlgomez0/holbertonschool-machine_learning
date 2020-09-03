@@ -4,7 +4,7 @@ import numpy as np
 
 
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
-    """returns convolved matrix"""
+    """returns convolved images"""
     hk = kernel.shape[0]
     wk = kernel.shape[1]
     m = images.shape[0]

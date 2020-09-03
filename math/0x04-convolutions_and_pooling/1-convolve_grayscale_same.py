@@ -4,7 +4,7 @@ import numpy as np
 
 
 def convolve_grayscale_same(images, kernel):
-    """returns convolved matrix"""
+    """returns convolved imges"""
     out_h = images.shape[1]
     out_w = images.shape[2]
     hk = kernel.shape[0]

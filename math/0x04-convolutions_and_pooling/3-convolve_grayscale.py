@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""performs convolution of gray images using custom padding"""
+"""performs convolution of gray images 
+   using custom padding and stride"""
 import numpy as np
 
 
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
-    """returns convolved matrix"""
+    """returns convolved images"""
     hk = kernel.shape[0]
     wk = kernel.shape[1]
     m = images.shape[0]

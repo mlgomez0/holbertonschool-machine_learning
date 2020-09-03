@@ -1,16 +1,18 @@
-#0x01. Plotting
+# 0x04. Convolutions and Pooling
 
 ## Concepts
 
-- What is a plot?
-- What is a scatter plot? line graph? bar graph? histogram?
-- What is matplotlib?
-- How to plot data with matplotlib
-- How to label a plot
-- How to scale an axis
-- How to plot multiple sets of data at the same time
+- What is a convolution?
+- What is max pooling? average pooling?
+- What is a kernel/filter?
+- What is padding?
+- What is “same” padding? “valid” padding?
+- What is a stride?
+- What are channels?
+- How to perform a convolution over an image
+- How to perform max/average pooling over an image
 
-#Installation
+## Installation
 Files were interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
 Files were executed with numpy (version 1.15)
 Files will be executed with numpy (version 1.15) and matplotlib (version 3.0)
@@ -20,82 +22,146 @@ Files will be executed with numpy (version 1.15) and matplotlib (version 3.0)
 Educational purposes
 
 ## Tasks
-0. Line Graph: 0-line.py
+0. Valid Convolution: 0-convolve_grayscale_valid.py
 ```
-Complete the following source code to plot y as a line graph:
+Write a function def convolve_grayscale_valid(images, kernel): that performs a valid convolution on grayscale images:
 
-y should be plotted as a solid red line
-The x-axis should range from 0 to 10
+images is a numpy.ndarray with shape (m, h, w) containing multiple grayscale images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+kernel is a numpy.ndarray with shape (kh, kw) containing the kernel for the convolution
+kh is the height of the kernel
+kw is the width of the kernel
+You are only allowed to use two for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the convolved images
 ```
-1. Scatter: 1-scatter.py
+1. Same Convolution: 1-convolve_grayscale_same.py
 ```
-Complete the following source code to plot x  y as a scatter plot:
+Write a function def convolve_grayscale_same(images, kernel): that performs a same convolution on grayscale images:
 
-The x-axis should be labeled Height (in)
-The y-axis should be labeled Weight (lbs)
-The title should be Men's Height vs Weight
-The data should be plotted as magenta points
+images is a numpy.ndarray with shape (m, h, w) containing multiple grayscale images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+kernel is a numpy.ndarray with shape (kh, kw) containing the kernel for the convolution
+kh is the height of the kernel
+kw is the width of the kernel
+if necessary, the image should be padded with 0’s
+You are only allowed to use two for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the convolved images
 ```
-2. Change of scale: 2-change_scale.py
+2. Convolution with Padding: 2-convolve_grayscale_padding.py
 ```
-Complete the following source code to plot x  y as a line graph:
+Write a function def convolve_grayscale_padding(images, kernel, padding): that performs a convolution on grayscale images with custom padding:
 
-The x-axis should be labeled Time (years)
-The y-axis should be labeled Fraction Remaining
-The title should be Exponential Decay of C-14
-The y-axis should be logarithmically scaled
-The x-axis should range from 0 to 28650
+images is a numpy.ndarray with shape (m, h, w) containing multiple grayscale images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+kernel is a numpy.ndarray with shape (kh, kw) containing the kernel for the convolution
+kh is the height of the kernel
+kw is the width of the kernel
+padding is a tuple of (ph, pw)
+ph is the padding for the height of the image
+pw is the padding for the width of the image
+the image should be padded with 0’s
+You are only allowed to use two for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the convolved images
 ```
-3. Two is better than one: 3-two.py
+3. Strided Convolution: 3-convolve_grayscale.py
 ```
-Complete the following source code to plot x  y1 and x  y2 as line graphs:
+Write a function def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)): that performs a convolution on grayscale images:
 
-The x-axis should be labeled Time (years)
-The y-axis should be labeled Fraction Remaining
-The title should be Exponential Decay of Radioactive Elements
-The x-axis should range from 0 to 20,000
-The y-axis should range from 0 to 1
-x  y1 should be plotted with a dashed red line
-x  y2 should be plotted with a solid green line
-A legend labeling x  y1 as C-14 and x  y2 as Ra-226 should be placed in the upper right hand corner of the plot
+images is a numpy.ndarray with shape (m, h, w) containing multiple grayscale images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+kernel is a numpy.ndarray with shape (kh, kw) containing the kernel for the convolution
+kh is the height of the kernel
+kw is the width of the kernel
+padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
+if ‘same’, performs a same convolution
+if ‘valid’, performs a valid convolution
+if a tuple:
+ph is the padding for the height of the image
+pw is the padding for the width of the image
+the image should be padded with 0’s
+stride is a tuple of (sh, sw)
+sh is the stride for the height of the image
+sw is the stride for the width of the image
+You are only allowed to use two for loops; any other loops of any kind are not allowed Hint: loop over i and j
+Returns: a numpy.ndarray containing the convolved images
 ```
-4. Frequency: 4-frequency.py
+4. Convolution with Channels: 4-convolve_channels.py
 ```
-Complete the following source code to plot a histogram of student scores for a project:
+Write a function def convolve_channels(images, kernel, padding='same', stride=(1, 1)): that performs a convolution on images with channels:
 
-The x-axis should be labeled Grades
-The y-axis should be labeled Number of Students
-The x-axis should have bins every 10 units
-The title should be Project A
-The bars should be outlined in black
+images is a numpy.ndarray with shape (m, h, w, c) containing multiple images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+c is the number of channels in the image
+kernel is a numpy.ndarray with shape (kh, kw, c) containing the kernel for the convolution
+kh is the height of the kernel
+kw is the width of the kernel
+padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
+if ‘same’, performs a same convolution
+if ‘valid’, performs a valid convolution
+if a tuple:
+ph is the padding for the height of the image
+pw is the padding for the width of the image
+the image should be padded with 0’s
+stride is a tuple of (sh, sw)
+sh is the stride for the height of the image
+sw is the stride for the width of the image
+You are only allowed to use two for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the convolved images
 ```
-5. All in One: 5-all_in_one.py
+5. Multiple Kernels: 5-convolve.py
 ```
-Complete the following source code to plot all 5 previous graphs in one figure:
+Write a function def convolve(images, kernels, padding='same', stride=(1, 1)): that performs a convolution on images using multiple kernels:
 
-All axis labels and plot titles should have a font size of x-small (to fit nicely in one figure)
-The plots should make a 3 x 2 grid
-The last plot should take up two column widths (see below)
-The title of the figure should be All in One
+images is a numpy.ndarray with shape (m, h, w, c) containing multiple images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+c is the number of channels in the image
+kernels is a numpy.ndarray with shape (kh, kw, c, nc) containing the kernels for the convolution
+kh is the height of a kernel
+kw is the width of a kernel
+nc is the number of kernels
+padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
+if ‘same’, performs a same convolution
+if ‘valid’, performs a valid convolution
+if a tuple:
+ph is the padding for the height of the image
+pw is the padding for the width of the image
+the image should be padded with 0’s
+stride is a tuple of (sh, sw)
+sh is the stride for the height of the image
+sw is the stride for the width of the image
+You are only allowed to use three for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the convolved images
 ```
-6. Stacking Bars: 6-bars.py:
+6. Pooling: 6-pool.py
 ```
-Complete the following source code to plot a stacked bar graph:
+Write a function def pool(images, kernel_shape, stride, mode='max'): that performs pooling on images:
 
-fruit is a matrix representing the number of fruit various people possess
-The columns of fruit represent the number of fruit Farrah, Fred, and Felicia have, respectively
-The rows of fruit represent the number of apples, bananas, oranges, and peaches, respectively
-The bars should represent the number of fruit each person possesses:
-The bars should be grouped by person, i.e, the horizontal axis should have one labeled tick per person
-Each fruit should be represented by a specific color:
-apples = red
-bananas = yellow
-oranges = orange (#ff8000)
-peaches = peach (#ffe5b4)
-A legend should be used to indicate which fruit is represented by each color
-The bars should be stacked in the same order as the rows of fruit, from bottom to top
-The bars should have a width of 0.5
-The y-axis should be labeled Quantity of Fruit
-The y-axis should range from 0 to 80 with ticks every 10 units
-The title should be Number of Fruit per Person
+images is a numpy.ndarray with shape (m, h, w, c) containing multiple images
+m is the number of images
+h is the height in pixels of the images
+w is the width in pixels of the images
+c is the number of channels in the image
+kernel_shape is a tuple of (kh, kw) containing the kernel shape for the pooling
+kh is the height of the kernel
+kw is the width of the kernel
+stride is a tuple of (sh, sw)
+sh is the stride for the height of the image
+sw is the stride for the width of the image
+mode indicates the type of pooling
+max indicates max pooling
+avg indicates average pooling
+You are only allowed to use two for loops; any other loops of any kind are not allowed
+Returns: a numpy.ndarray containing the pooled images
 ```

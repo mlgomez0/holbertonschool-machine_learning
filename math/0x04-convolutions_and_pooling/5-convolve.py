@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""performs convolution of images with channels"""
+"""performs convolution of images using
+   using multiple kernels"""
 import numpy as np
 
 
 def convolve(images, kernels, padding='same', stride=(1, 1)):
-    """returns convolved matrix"""
+    """returns convolved images"""
     hk = kernels.shape[0]
     wk = kernels.shape[1]
     nc = kernels.shape[3]
