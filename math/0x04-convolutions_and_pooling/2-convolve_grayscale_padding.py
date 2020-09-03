@@ -5,7 +5,6 @@ import numpy as np
 
 def convolve_grayscale_padding(images, kernel, padding):
     """returns convolved matrix"""
-      
     hk = kernel.shape[0]
     wk = kernel.shape[1]
     m = images.shape[0]
