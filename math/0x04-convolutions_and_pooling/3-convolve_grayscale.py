@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""performs convolution of gray images 
+"""performs convolution of gray images
    using custom padding and stride"""
 import numpy as np
 
