@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """performs convolution of gray images using custom padding"""
+import numpy as np
 from math import ceil, floor
 
 
