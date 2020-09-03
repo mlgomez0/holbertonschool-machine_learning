@@ -19,6 +19,9 @@ def pool(images, kernel_shape, stride, mode='max'):
     for h in range(out_h):
         for w in range(out_w):
             matrix = img[:, h * stride[0] : h * stride[0] + hk, w * stride[1] : w * stride[1] + wk,:]
-            v = np.average(matrix, axis=(1,2))
+            if mode == "max":
+                v = np.max(matrix, axis=(1,2))
+            else:
+                v = np.average(matrix, axis=(1,2))
             pooled[:, h, w,:] = v
     return(pooled)
