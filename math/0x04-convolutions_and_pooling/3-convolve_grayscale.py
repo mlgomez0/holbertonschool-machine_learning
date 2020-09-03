@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """performs convolution of gray images using custom padding"""
 import numpy as np
-from math import floor
+from math import ceil, floor
 
 
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
