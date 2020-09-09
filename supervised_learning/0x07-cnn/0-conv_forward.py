@@ -28,7 +28,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     for c in range(nc):
         for h in range(out_h):
             for w in range(out_w):
-                ma = img[:, h * st0: h * st0 + hk, w * st1: w * st1 + wk, :]
+                ma = img[:, h * st0: h * st0 + hk, w * st1: w * st1 + wk]
                 vm = np.sum(ma * W[..., c], axis=1).sum(axis=1)
                 v = vm.sum(axis=1)
                 convoluted[:, h, w, c] = v
