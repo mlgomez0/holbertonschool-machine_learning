@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""performs forward propagation over a 
-   convolutional layer of a neural network"""
+"""performs back propagation over a pooling
+   layer of a neural network"""
 import numpy as np
 
 
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
+    """returns partial derivatives with respect to the previous
+       layer (dA_prev)"""
     hk = kernel_shape[0]
     wk = kernel_shape[1]
     nc = A_prev.shape[3]
@@ -20,12 +22,15 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
         for h in range(out_h):
             for w in range(out_w):
                 for c in range(nc):
-                    matrix = A_prev[i, h * st0: h * st0 + hk, w * st1: w * st1 + wk, c]
+                    matrix = A_prev[i, h * st0: h * st0 + hk,
+                                    w * st1: w * st1 + wk, c]
                     if mode == "max":
                         max_va = matrix.max() == matrix
-                        dA_prev[i, h * st0: h * st0 + hk, w * st1: w * st1 + wk, c] += dA[i,h,w,c] * max_va
-                        
+                        dA_prev[i, h * st0: h * st0 + hk,
+                                w * st1: w * st1 + wk,
+                                c] += dA[i, h, w, c] * max_va
                     else:
-                        dA_prev[i, h * st0: h * st0 + hk, w * st1: w * st1 + wk, c] += dA[i,h,w,c] / (hk * wk)
-            
+                        dA_prev[i, h * st0: h * st0 + hk,
+                                w * st1: w * st1 + wk,
+                                c] += dA[i, h, w, c] / (hk * wk)
     return(dA_prev)

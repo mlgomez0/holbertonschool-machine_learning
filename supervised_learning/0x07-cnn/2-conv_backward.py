@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""performs forward propagation over a 
-   convolutional layer of a neural network"""
+"""performs back propagation over a convolutional
+   layer of a neural network"""
 import numpy as np
 
 
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
-    """the output of the convolutional layer"""
+    """partial derivatives with respect to the
+       previous layer (dA_prev),
+       the kernels (dW), and the biases (db)"""
     hk = W.shape[0]
     wk = W.shape[1]
     nc = W.shape[3]
@@ -27,13 +29,16 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     dX = np.zeros(x_pad.shape)
     dW = np.zeros(W.shape)
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
-        
     for i in range(m):
         for h in range(out_h):
             for w in range(out_w):
                 for c in range(nc):
-                    dX[i, h * st0: h * st0 + hk, w * st1: w * st1 + wk, :] += dZ[i, h, w, c] * W[:, :, :, c]
-                    dW[:, :, :, c] += x_pad[i, h * st0: h * st0 + hk, w * st1: w * st1 + wk, :] * dZ[i, h, w, c]
+                    dX[i, h * st0: h * st0 + hk,
+                       w * st1: w * st1 + wk, :] += dZ[
+                       i, h, w, c] * W[:, :, :, c]
+                    dW[:, :, :, c] += x_pad[i, h * st0: h * st0 + hk,
+                                            w * st1: w * st1 + wk,
+                                            :] * dZ[i, h, w, c]
     if padding == "same":
-        dX = dX[:, pad0:-pad0, pad1:-pad1,:]
+        dX = dX[:, pad0:-pad0, pad1:-pad1, :]
     return(dX, dW, db)
