@@ -18,8 +18,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         pad0 = 0
         pad1 = 0
     else:
-        pad0 = int(((hm - 1) * st0 + hk - hm) / 2) + 1
-        pad1 = int(((wm - 1) * st1 + wk - wm) / 2) + 1
+        pad0 = int(((hm - 1) * st0 + hk - hm) / 2)
+        pad1 = int(((wm - 1) * st1 + wk - wm) / 2)
     out_h = int((hm + 2 * pad0 - hk) / st0) + 1
     out_w = int((wm + 2 * pad1 - wk) / st1) + 1
     convoluted = np.zeros((m, out_h, out_w, nc))
