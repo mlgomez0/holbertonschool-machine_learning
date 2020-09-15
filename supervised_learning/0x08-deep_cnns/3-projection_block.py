@@ -4,14 +4,14 @@
 import tensorflow.keras as K
 
 
-def identity_block(A_prev, filters):
+def projection_block(A_prev, filters, s=2):
     """the keras model"""
     F11, F3, F12 = filters
     conv1 = K.layers.Conv2D(filters=F11,
                             kernel_size=(1, 1),
                             padding="same",
                             kernel_initializer="he_normal",
-                            strides=(1, 1))(A_prev)
+                            strides=(s, s))(A_prev)
     BN1 = K.layers.BatchNormalization(axis=3)(conv1)
     Relu1 = K.layers.Activation("relu")(BN1)
     conv2 = K.layers.Conv2D(filters=F3,
@@ -27,6 +27,11 @@ def identity_block(A_prev, filters):
                             kernel_initializer="he_normal",
                             strides=(1, 1))(Relu2)
     BN3 = K.layers.BatchNormalization(axis=3)(conv3)
-    add_layers = K.layers.Add()([BN3, A_prev])
+    conv_sc = K.layers.Conv2D(filters=F12,
+                            kernel_size=(1, 1),
+                            padding="same",
+                            kernel_initializer="he_normal",
+                            strides=(s, s))(A_prev)
+    BN_sc = K.layers.BatchNormalization(axis=3)(conv_sc)
+    add_layers = K.layers.Add()([BN3, BN_sc])
     return K.layers.Activation("relu")(add_layers)
-                     
