@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""builds the inception network as described in Going Deeper
-   with Convolutions (2014)"""
+"""builds a projection block as described in
+   Deep Residual Learning for Image
+   Recognition (2015):"""
 import tensorflow.keras as K
 
 
@@ -28,10 +29,10 @@ def projection_block(A_prev, filters, s=2):
                             strides=(1, 1))(Relu2)
     BN3 = K.layers.BatchNormalization(axis=3)(conv3)
     conv_sc = K.layers.Conv2D(filters=F12,
-                            kernel_size=(1, 1),
-                            padding="same",
-                            kernel_initializer="he_normal",
-                            strides=(s, s))(A_prev)
+                              kernel_size=(1, 1),
+                              padding="same",
+                              kernel_initializer="he_normal",
+                              strides=(s, s))(A_prev)
     BN_sc = K.layers.BatchNormalization(axis=3)(conv_sc)
     add_layers = K.layers.Add()([BN3, BN_sc])
     return K.layers.Activation("relu")(add_layers)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""builds the inception network as described in Going Deeper
-   with Convolutions (2014)"""
+"""builds the DenseNet-121 architecture
+   as described in Densely Connected
+   Convolutional Networks:"""
 import tensorflow.keras as K
 dense_block = __import__('5-dense_block').dense_block
 transition_layer = __import__('6-transition_layer').transition_layer
@@ -19,7 +20,7 @@ def densenet121(growth_rate=32, compression=1.0):
     pool1 = K.layers.MaxPool2D(pool_size=(3, 3),
                                strides=(2, 2),
                                padding="same")(conv1)
-    
+
     DB1, NF1 = dense_block(pool1, 64, growth_rate, 6)
     TL1, NFT1 = transition_layer(DB1, NF1, compression)
     DB2, NF2 = dense_block(TL1, NFT1, growth_rate, 12)

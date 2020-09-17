@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""builds the inception network as described in Going Deeper
-   with Convolutions (2014)"""
+"""that builds the ResNet-50 architecture
+   as described in Deep Residual Learning
+   for Image Recognition (2015):"""
 import tensorflow.keras as K
 identity_block = __import__('2-identity_block').identity_block
 projection_block = __import__('3-projection_block').projection_block
@@ -40,4 +41,3 @@ def resnet50():
     lin = K.layers.Dense(units=1000, activation='softmax',
                          kernel_initializer="he_normal")(pool2)
     return K.Model(inputs=inputs, outputs=lin)
- 

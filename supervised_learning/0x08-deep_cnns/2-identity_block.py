@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""builds the inception network as described in Going Deeper
-   with Convolutions (2014)"""
+"""builds an identity block as described in Deep Residual
+   Learning for Image Recognition (2015)"""
 import tensorflow.keras as K
 
 
 def identity_block(A_prev, filters):
-    """the keras model"""
+    """Returns: the activated output of
+       the identity block"""
     F11, F3, F12 = filters
     conv1 = K.layers.Conv2D(filters=F11,
                             kernel_size=(1, 1),
@@ -29,4 +30,3 @@ def identity_block(A_prev, filters):
     BN3 = K.layers.BatchNormalization(axis=3)(conv3)
     add_layers = K.layers.Add()([BN3, A_prev])
     return K.layers.Activation("relu")(add_layers)
-                     

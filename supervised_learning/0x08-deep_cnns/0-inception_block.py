@@ -9,22 +9,23 @@ def inception_block(A_prev, filters):
                             activation='relu', padding="same",
                             kernel_initializer="he_normal")(A_prev)
     conv3r = K.layers.Conv2D(filters=F3R,
-                            kernel_size=(1, 1),
-                            activation='relu', padding="same",
-                            kernel_initializer="he_normal")(A_prev)
+                             kernel_size=(1, 1),
+                             activation='relu', padding="same",
+                             kernel_initializer="he_normal")(A_prev)
     conv3 = K.layers.Conv2D(filters=F3,
                             kernel_size=(3, 3),
                             activation='relu', padding="same",
                             kernel_initializer="he_normal")(conv3r)
     conv5r = K.layers.Conv2D(filters=F5R,
-                            kernel_size=(1, 1),
-                            activation='relu', padding="same",
-                            kernel_initializer="he_normal")(A_prev)
+                             kernel_size=(1, 1),
+                             activation='relu', padding="same",
+                             kernel_initializer="he_normal")(A_prev)
     conv5 = K.layers.Conv2D(filters=F5,
                             kernel_size=(5, 5),
                             activation='relu', padding="same",
                             kernel_initializer="he_normal")(conv5r)
-    pool3 = K.layers.MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding="same")(A_prev)
+    pool3 = K.layers.MaxPool2D(pool_size=(3, 3),
+                               strides=(1, 1), padding="same")(A_prev)
     convf = K.layers.Conv2D(filters=FPP,
                             kernel_size=(1, 1),
                             activation='relu', padding="same",
