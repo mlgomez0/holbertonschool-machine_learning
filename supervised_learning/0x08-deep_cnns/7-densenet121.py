@@ -11,12 +11,11 @@ def densenet121(growth_rate=32, compression=1.0):
     """the keras model"""
     inputs = K.Input(shape=(224, 224, 3))
     BN1 = K.layers.BatchNormalization(axis=3)(inputs)
-    Relu1 = K.layers.Activation("relu")(BN1)
     conv1 = K.layers.Conv2D(filters=64,
                             kernel_size=(7, 7),
                             activation='relu', padding="same",
                             kernel_initializer="he_normal",
-                            strides=(2, 2))(Relu1)
+                            strides=(2, 2))(BN1)
     pool1 = K.layers.MaxPool2D(pool_size=(3, 3),
                                strides=(2, 2),
                                padding="same")(conv1)
