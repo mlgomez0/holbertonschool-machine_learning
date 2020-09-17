@@ -1,12 +1,12 @@
-# 0x07. Convolutional Neural Networks
+# 0x08. Deep Convolutional Architectures
 
 ## Concepts
 
-- What is a convolutional layer?
-- What is a pooling layer?
-- Forward propagation over convolutional and pooling layers
-- Back propagation over convolutional and pooling layers
-- How to build a CNN using Tensorflow and Keras
+- What is a skip connection?
+- What is a bottleneck layer?
+- What is the Inception Network?
+- What is ResNet? ResNeXt? DenseNet?
+- How to replicate a network architecture by reading a journal article
 
 # Installation
 Files were interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
@@ -19,135 +19,100 @@ Educational purposes
 
 ## Tasks
 
-0. Convolutional Forward Prop: 0-conv_forward.py
+0. Inception Block: 0-inception_block.py
 ```
-Write a function def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)): that performs forward propagation over a convolutional layer of a neural network:
+A_prev is the output from the previous layer
+filters is a tuple or list containing F1, F3R, F3,F5R, F5, FPP, respectively:
+F1 is the number of filters in the 1x1 convolution
+F3R is the number of filters in the 1x1 convolution before the 3x3 convolution
+F3 is the number of filters in the 3x3 convolution
+F5R is the number of filters in the 1x1 convolution before the 5x5 convolution
+F5 is the number of filters in the 5x5 convolution
+FPP is the number of filters in the 1x1 convolution after the max pooling
+All convolutions inside the inception block should use a rectified linear activation (ReLU)
+Returns: the concatenated output of the inception block
+```
+1. Inception Network: 1-inception_network.py
+```
+Write a function def inception_network(): that builds the inception network as described in Going Deeper with Convolutions (2014):
 
-A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
-m is the number of examples
-h_prev is the height of the previous layer
-w_prev is the width of the previous layer
-c_prev is the number of channels in the previous layer
-W is a numpy.ndarray of shape (kh, kw, c_prev, c_new) containing the kernels for the convolution
-kh is the filter height
-kw is the filter width
-c_prev is the number of channels in the previous layer
-c_new is the number of channels in the output
-b is a numpy.ndarray of shape (1, 1, 1, c_new) containing the biases applied to the convolution
-activation is an activation function applied to the convolution
-padding is a string that is either same or valid, indicating the type of padding used
-stride is a tuple of (sh, sw) containing the strides for the convolution
-sh is the stride for the height
-sw is the stride for the width
-you may import numpy as np
-Returns: the output of the convolutional layer
+You can assume the input data will have shape (224, 224, 3)
+All convolutions inside and outside the inception block should use a rectified linear activation (ReLU)
+You may use inception_block = __import__('0-inception_block').inception_block
+Returns: the keras model
 ```
-1. Pooling Forward Prop: 1-pool_forward.py
-```
-Write a function def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'): that performs forward propagation over a pooling layer of a neural network:
+2. Identity Block: 2-identity_block.py
 
-A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
-m is the number of examples
-h_prev is the height of the previous layer
-w_prev is the width of the previous layer
-c_prev is the number of channels in the previous layer
-kernel_shape is a tuple of (kh, kw) containing the size of the kernel for the pooling
-kh is the kernel height
-kw is the kernel width
-stride is a tuple of (sh, sw) containing the strides for the pooling
-sh is the stride for the height
-sw is the stride for the width
-mode is a string containing either max or avg, indicating whether to perform maximum or average pooling, respectively
-you may import numpy as np
-Returns: the output of the pooling layer
 ```
-2. Convolutional Back Prop:2-conv_backward.py
+A_prev is the output from the previous layer
+filters is a tuple or list containing F11, F3, F12, respectively:
+F11 is the number of filters in the first 1x1 convolution
+F3 is the number of filters in the 3x3 convolution
+F12 is the number of filters in the second 1x1 convolution
+All convolutions inside the block should be followed by batch normalization along the channels axis and a rectified linear activation (ReLU), respectively.
+All weights should use he normal initialization
+Returns: the activated output of the identity block
 ```
-Write a function def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)): that performs back propagation over a convolutional layer of a neural network:
+3. Projection Block: 3-projection_block.py
+```
+A_prev is the output from the previous layer
+filters is a tuple or list containing F11, F3, F12, respectively:
+F11 is the number of filters in the first 1x1 convolution
+F3 is the number of filters in the 3x3 convolution
+F12 is the number of filters in the second 1x1 convolution as well as the 1x1 convolution in the shortcut connection
+s is the stride of the first convolution in both the main path and the shortcut connection
+All convolutions inside the block should be followed by batch normalization along the channels axis and a rectified linear activation (ReLU), respectively.
+All weights should use he normal initialization
+Returns: the activated output of the projection block
+```
+4. ResNet-50: 4-resnet50.py
+```
+Write a function def resnet50(): that builds the ResNet-50 architecture as described in Deep Residual Learning for Image Recognition (2015):
 
-dZ is a numpy.ndarray of shape (m, h_new, w_new, c_new) containing the partial derivatives with respect to the unactivated output of the convolutional layer
-m is the number of examples
-h_new is the height of the output
-w_new is the width of the output
-c_new is the number of channels in the output
-A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
-h_prev is the height of the previous layer
-w_prev is the width of the previous layer
-c_prev is the number of channels in the previous layer
-W is a numpy.ndarray of shape (kh, kw, c_prev, c_new) containing the kernels for the convolution
-kh is the filter height
-kw is the filter width
-b is a numpy.ndarray of shape (1, 1, 1, c_new) containing the biases applied to the convolution
-padding is a string that is either same or valid, indicating the type of padding used
-stride is a tuple of (sh, sw) containing the strides for the convolution
-sh is the stride for the height
-sw is the stride for the width
-you may import numpy as np
-Returns: the partial derivatives with respect to the previous layer (dA_prev), the kernels (dW), and the biases (db), respectively
+You can assume the input data will have shape (224, 224, 3)
+All convolutions inside and outside the blocks should be followed by batch normalization along the channels axis and a rectified linear activation (ReLU), respectively.
+All weights should use he normal initialization
+You may use:
+identity_block = __import__('2-identity_block').identity_block
+projection_block = __import__('3-projection_block').projection_block
+Returns: the keras model
 ```
-3. Pooling Back Prop: 3-pool_backward.py
+5. Dense Block:5-dense_block.py
 ```
-Write a function def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'): that performs back propagation over a pooling layer of a neural network:
+Write a function def dense_block(X, nb_filters, growth_rate, layers): that builds a dense block as described in Densely Connected Convolutional Networks:
 
-dA is a numpy.ndarray of shape (m, h_new, w_new, c_new) containing the partial derivatives with respect to the output of the pooling layer
-m is the number of examples
-h_new is the height of the output
-w_new is the width of the output
-c is the number of channels
-A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c) containing the output of the previous layer
-h_prev is the height of the previous layer
-w_prev is the width of the previous layer
-kernel_shape is a tuple of (kh, kw) containing the size of the kernel for the pooling
-kh is the kernel height
-kw is the kernel width
-stride is a tuple of (sh, sw) containing the strides for the pooling
-sh is the stride for the height
-sw is the stride for the width
-mode is a string containing either max or avg, indicating whether to perform maximum or average pooling, respectively
-you may import numpy as np
-Returns: the partial derivatives with respect to the previous layer (dA_prev)
+X is the output from the previous layer
+nb_filters is an integer representing the number of filters in X
+growth_rate is the growth rate for the dense block
+layers is the number of layers in the dense block
+You should use the bottleneck layers used for DenseNet-B
+All weights should use he normal initialization
+All convolutions should be preceded by Batch Normalization and a rectified linear activation (ReLU), respectively
+Returns: The concatenated output of each layer within the Dense Block and the number of filters within the concatenated outputs, respectively
 ```
-4. LeNet-5 (Tensorflow): 4-lenet5.py
+6. Transition Layer:
 ```
-Write a function def lenet5(x, y): that builds a modified version of the LeNet-5 architecture using tensorflow:
+Write a function def transition_layer(X, nb_filters, compression): that builds a transition layer as described in Densely Connected Convolutional Networks:
 
-x is a tf.placeholder of shape (m, 28, 28, 1) containing the input images for the network
-m is the number of images
-y is a tf.placeholder of shape (m, 10) containing the one-hot labels for the network
-The model should consist of the following layers in order:
-Convolutional layer with 6 kernels of shape 5x5 with same padding
-Max pooling layer with kernels of shape 2x2 with 2x2 strides
-Convolutional layer with 16 kernels of shape 5x5 with valid padding
-Max pooling layer with kernels of shape 2x2 with 2x2 strides
-Fully connected layer with 120 nodes
-Fully connected layer with 84 nodes
-Fully connected softmax output layer with 10 nodes
-All layers requiring initialization should initialize their kernels with the he_normal initialization method: tf.contrib.layers.variance_scaling_initializer()
-All hidden layers requiring activation should use the relu activation function
-you may import tensorflow as tf
-you may NOT use tf.keras
-Returns:
-a tensor for the softmax activated output
-a training operation that utilizes Adam optimization (with default hyperparameters)
-a tensor for the loss of the netowrk
-a tensor for the accuracy of the network
+X is the output from the previous layer
+nb_filters is an integer representing the number of filters in X
+compression is the compression factor for the transition layer
+Your code should implement compression as used in DenseNet-C
+All weights should use he normal initialization
+All convolutions should be preceded by Batch Normalization and a rectified linear activation (ReLU), respectively
+Returns: The output of the transition layer and the number of filters within the output, respectively
 ```
-5. LeNet-5 (Keras): 5-lenet5.py
+7. DenseNet-121: 7-densenet121.py
 ```
-Write a function def lenet5(X): that builds a modified version of the LeNet-5 architecture using keras:
+Write a function def densenet121(growth_rate=32, compression=1.0): that builds the DenseNet-121 architecture as described in Densely Connected Convolutional Networks:
 
-X is a K.Input of shape (m, 28, 28, 1) containing the input images for the network
-m is the number of images
-The model should consist of the following layers in order:
-Convolutional layer with 6 kernels of shape 5x5 with same padding
-Max pooling layer with kernels of shape 2x2 with 2x2 strides
-Convolutional layer with 16 kernels of shape 5x5 with valid padding
-Max pooling layer with kernels of shape 2x2 with 2x2 strides
-Fully connected layer with 120 nodes
-Fully connected layer with 84 nodes
-Fully connected softmax output layer with 10 nodes
-All layers requiring initialization should initialize their kernels with the he_normal initialization method
-All hidden layers requiring activation should use the relu activation function
-you may import tensorflow.keras as K
-Returns: a K.Model compiled to use Adam optimization (with default hyperparameters) and accuracy metrics
+growth_rate is the growth rate
+compression is the compression factor
+You can assume the input data will have shape (224, 224, 3)
+All convolutions should be preceded by Batch Normalization and a rectified linear activation (ReLU), respectively
+All weights should use he normal initialization
+You may use:
+dense_block = __import__('5-dense_block').dense_block
+transition_layer = __import__('6-transition_layer').transition_layer
+Returns: the keras model
 ```
