@@ -7,12 +7,14 @@ import tensorflow.keras as K
 
 
 def preprocess_data1(X, Y):
+    """preprocess data so it is accepted by ResNet50 model"""
     x_test = K.applications.resnet50.preprocess_input(X)
     y_test = K.utils.to_categorical(Y)
     return x_test, y_test
 
 
 def resize_images1(X):
+    """resize data so it is accepted by ResNet50 model"""
     return K.backend.resize_images(X, 7, 7,
                                    data_format="channels_last",
                                    interpolation='bilinear')
