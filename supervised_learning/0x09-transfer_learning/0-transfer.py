@@ -23,7 +23,7 @@ def resize_images1(X):
 if __name__ == "__main__":
     (X_train, Y_train), (
      X_valid, Y_valid) = K.datasets.cifar10.load_data()
-    optimizer = K.optimizers.Adam(lr=0.0001)
+    optimizer = K.optimizers.Adam(lr=0.001)
     ResNet50_model = K.applications.ResNet50(weights='imagenet',
                                              include_top=False,
                                              input_shape=(224, 224, 3))
