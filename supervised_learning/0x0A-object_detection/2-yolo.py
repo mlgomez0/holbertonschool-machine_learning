@@ -59,3 +59,31 @@ class Yolo():
             box[..., 2] = x2 * img_W
             box[..., 3] = y2 * img_H
         return boxes, confidences, class_proba
+
+    def filter_boxes(self, boxes, box_confidences, box_class_probs):
+        """Returns a tuple of (filtered_boxes, box_classes,
+           box_scores)"""
+        filtered_scores = []
+        filtered_class = []
+        filtered_boxes = []
+        for i in range(len(boxes)):
+            box_score = box_confidences[i] * box_class_probs[i]
+            box_class_idx = np.argmax(box_score, axis=-1)
+            box_max_scores = np.max(box_score, axis=-1)
+            mask = box_max_scores >= self.class_t
+            score = mask * box_max_scores
+            score1 = score[score > 0]
+            filtered_scores.append(score1)
+            class1 = box_class_idx * mask
+            class2 = class1[class1 > 0]
+            filtered_class.append(class2)
+            a, b, c, _ = boxes[i].shape
+            mask_reshape = mask.reshape(a, b, c, 1)
+            box1 = boxes[i] * mask_reshape
+            box2 = box1[box1 != 0]
+            filtered_boxes.append(box2)
+        filtered_scores1 = np.concatenate(filtered_scores)
+        filtered_class1 = np.concatenate(filtered_class)
+        filtered_boxes1 = np.concatenate(filtered_boxes)
+        filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
+        return filtered_boxes2, filtered_class1, filtered_scores1
