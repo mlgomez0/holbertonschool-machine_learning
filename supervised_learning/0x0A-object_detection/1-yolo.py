@@ -35,8 +35,10 @@ class Yolo():
         for i, box in enumerate(boxes):
             g_h, g_w, achors_box,_ = box.shape
             coordidate = np.zeros((g_h, g_w, achors_box))
-            idx_y = np.arange(g_h).reshape(g_h, 1, 1)
-            idx_x = np.arange(g_w).reshape(g_w, 1, 1)
+            idx_y = np.arange(g_h)
+            idx_y = idx_y.reshape(g_h, 1, 1)
+            idx_x = np.arange(g_w)
+            idx_x = idx_x.reshape(g_w, 1, 1)
             C_x = coordidate + idx_x
             C_y = coordidate + idx_y
             centerX = box[..., 0]
