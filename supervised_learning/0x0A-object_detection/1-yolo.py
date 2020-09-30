@@ -2,7 +2,6 @@
 """class for model Yolo"""
 import tensorflow.keras as K
 import numpy as np
-import tensorflow as tf
 
 
 class Yolo():
@@ -17,18 +16,45 @@ class Yolo():
         self.nms_t = nms_t
         self.anchors = anchors
 
+    def sigmoid(self, z):
+        return (1 / (1 + np.exp(-z)))
+
     def process_outputs(self, outputs, image_size):
         """Returns a tuple of (boxes, box_confidences,
            box_class_probs)"""
         boxes = []
         confidences = []
         class_proba = []
-        
+        img_H = image_size[0]
+        img_W = image_size[1]
+                
         for output in outputs:
-            scores = 1 / (1 + np.exp(-1 * output[:, :, :, 5:]))
-            confidence = 1 / (1 + np.exp(-1 * output[:, :, :, 4:5]))
-            box = output[:, :, :, 0:4] * np.concatenate((np.flipud(image_size), np.flipud(image_size)), axis=0)
-            boxes.append(box)
-            confidences.append(confidence)
-            class_proba.append(scores)
+            boxes.append(output[..., 0:4])
+            confidences.append(self.sigmoid(output[..., 4, np.newaxis]))
+            class_proba.append(self.sigmoid(output[..., 5:]))
+        for i, box in enumerate(boxes):
+            g_h, g_w, achors_box,_ = box.shape
+            coordidate = np.zeros((g_h, g_w, achors_box))
+            idx_y = np.arange(g_h).reshape(g_h, 1, 1)
+            idx_x = np.arange(g_w).reshape(g_w, 1, 1)
+            C_x = coordidate + idx_x
+            C_y = coordidate + idx_y
+            centerX = box[..., 0]
+            centerY = box[..., 1]
+            width = box[..., 2]
+            height = box[..., 3]
+            bx = (self.sigmoid(centerX) + C_x) / g_w
+            by = (self.sigmoid(centerY) + C_y) / g_h
+            pw = self.anchors[i, :, 0]
+            ph = self.anchors[i, :, 1]
+            bw = (np.exp(width) * pw) / self.model.input.shape[1].value
+            bh = (np.exp(height) * ph) / self.model.input.shape[2].value
+            x1 = bx - bw / 2
+            y1 = by - bh / 2
+            x2 = x1 + bw
+            y2 = y1 + bh
+            box[..., 0] = x1 * img_W
+            box[..., 1] = y1 * img_H
+            box[..., 2] = x2 * img_W
+            box[..., 3] = y2 * img_H
         return boxes, confidences, class_proba
