@@ -69,14 +69,14 @@ class Yolo():
         filtered_boxes = []
         for i in range(len(boxes)):
             box_score = box_confidences[i] * box_class_probs[i]
-            box_class_idx = np.argmax(box_score, axis=-1)
-            box_max_scores = np.max(box_score, axis=-1)
+            box_max_scores = np.max(box_score, axis=-1).reshape(-1)
+            box_class_idx_del = np.where(box_max_scores < self.class_t)
             mask = box_max_scores >= self.class_t
             score = mask * box_max_scores
             score1 = score[score > 0]
             filtered_scores.append(score1)
-            class1 = box_class_idx * mask
-            class2 = class1[class1 > 0]
+            class1 = np.argmax(box_score, axis=-1).reshape(-1)
+            class2 = np.delete(class1, box_class_idx_del)
             filtered_class.append(class2)
             a, b, c, _ = boxes[i].shape
             mask_reshape = mask.reshape(a, b, c, 1)

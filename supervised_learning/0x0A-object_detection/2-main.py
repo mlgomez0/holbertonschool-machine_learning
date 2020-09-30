@@ -15,5 +15,8 @@ if __name__ == '__main__':
     boxes, box_confidences, box_class_probs = yolo.process_outputs([output1, output2, output3], np.array([500, 700]))
     boxes, box_classes, box_scores = yolo.filter_boxes(boxes, box_confidences, box_class_probs)
     print('Boxes:', boxes)
+    print(boxes.shape)
     print('Box classes:', box_classes)
+    print(box_classes.shape)
     print('Box scores:', box_scores)
+    print(box_scores.shape)
