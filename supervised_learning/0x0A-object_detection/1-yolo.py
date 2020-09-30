@@ -17,6 +17,7 @@ class Yolo():
         self.anchors = anchors
 
     def sigmoid(self, z):
+        """performs sigmoid mapping"""
         return (1 / (1 + np.exp(-z)))
 
     def process_outputs(self, outputs, image_size):
