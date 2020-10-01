@@ -2,6 +2,8 @@
 """class for model Yolo"""
 import tensorflow.keras as K
 import numpy as np
+import cv2
+import glob
 
 
 class Yolo():
@@ -94,17 +96,17 @@ class Yolo():
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
         pick = []
-        x1 = filtered_boxes[:,0]
-        y1 = filtered_boxes[:,1]
-        x2 = filtered_boxes[:,2]
-        y2 = filtered_boxes[:,3]
+        x1 = filtered_boxes[:, 0]
+        y1 = filtered_boxes[:, 1]
+        x2 = filtered_boxes[:, 2]
+        y2 = filtered_boxes[:, 3]
         area = (x2 - x1 + 1) * (y2 - y1 + 1)
         idxs = (-box_classes).argsort()
         while len(idxs) > 0:
             last = len(idxs) - 1
             i = idxs[last]
             class_check = box_classes[last]
-            #pick.append(i)
+            # pick.append(i)
             suppress = [last]
             for pos in range(0, last):
                 j = idxs[pos]
@@ -117,13 +119,20 @@ class Yolo():
                 overlap = float(w * h) / area[j]
                 if overlap > self.nms_t:
                     suppress.append(pos)
-            
-            suppress1 = [idx for idx in suppress if box_classes[idx] == class_check]
+            suppress1 = [idx for idx in suppress if
+                         box_classes[idx] == class_check]
             temp = suppress1[0]
             for id1 in suppress1:
                 if box_scores[id1] > box_scores[temp]:
                     temp = id1
             pick.append(temp)
             idxs = np.delete(idxs, suppress1)
-            
         return filtered_boxes[pick], box_classes[pick], box_scores[pick]
+
+    @staticmethod
+    def load_images(folder_path):
+        """Returns a tuple of (images, image_paths)
+        """
+        image_paths = glob.glob(folder_path + "/*.jpg")
+        list_path = [cv2.imread(i) for i in image_paths]
+        return list_path, np.array(image_paths)
