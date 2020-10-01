@@ -2,6 +2,8 @@
 """class for model Yolo"""
 import tensorflow.keras as K
 import numpy as np
+import cv2
+import glob
 
 
 class Yolo():
@@ -88,9 +90,6 @@ class Yolo():
         filtered_boxes1 = np.concatenate(filtered_boxes)
         filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
         return filtered_boxes2, filtered_class1, filtered_scores1
-    
-    def iou(self, x1_i, x1_j):
-        return x1_i, x1_j
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """Returns a tuple of
@@ -132,3 +131,23 @@ class Yolo():
                 i += 1
             acummulated += number_count
         return box_predictions, predict_box_classes, predict_box_scores
+
+    @staticmethod
+    def load_images(folder_path):
+        """Returns a tuple of (images, image_paths)
+        """
+        image_paths = glob.glob(folder_path + "/*")
+        list_path = [cv2.imread(i) for i in image_paths]
+        return list_path, image_paths
+
+    def preprocess_images(self, images):
+        """method to preprocess images for Darknet model"""
+        images_list = []
+        images_shape = []
+        for img in images:
+            images_shape.append([img.shape[0], img.shape[1]])
+            new_size = (self.model.input.shape[1], self.model.input.shape[2])
+            img_resized = (cv2.resize(img, new_size,
+                           interpolation=cv2.INTER_CUBIC)) / 255
+            images_list.append(img_resized)
+        return (np.array(images_list), np.array(images_shape))

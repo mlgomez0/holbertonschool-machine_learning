@@ -95,40 +95,43 @@ class Yolo():
         """Returns a tuple of
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
-        pick = []
-        x1 = filtered_boxes[:, 0]
-        y1 = filtered_boxes[:, 1]
-        x2 = filtered_boxes[:, 2]
-        y2 = filtered_boxes[:, 3]
-        area = (x2 - x1 + 1) * (y2 - y1 + 1)
-        idxs = (-box_classes).argsort()
-        while len(idxs) > 0:
-            last = len(idxs) - 1
-            i = idxs[last]
-            class_check = box_classes[last]
-            # pick.append(i)
-            suppress = [last]
-            for pos in range(0, last):
-                j = idxs[pos]
-                xx1 = max(x1[i], x1[j])
-                yy1 = max(y1[i], y1[j])
-                xx2 = min(x2[i], x2[j])
-                yy2 = min(y2[i], y2[j])
-                w = max(0, xx2 - xx1 + 1)
-                h = max(0, yy2 - yy1 + 1)
-                overlap = float(w * h) / area[j]
-                if overlap > self.nms_t:
-                    suppress.append(pos)
-            suppress1 = [idx for idx in suppress if
-                         box_classes[idx] == class_check]
-            temp = suppress1[0]
-            for id1 in suppress1:
-                if box_scores[id1] > box_scores[temp]:
-                    temp = id1
-            pick.append(temp)
-            idxs = np.delete(idxs, suppress1)
-        return filtered_boxes[pick], box_classes[pick], box_scores[pick]
-
+        index = np.lexsort((-box_scores, box_classes))
+        box_predictions = filtered_boxes[index]
+        predict_box_classes = box_classes[index]
+        predict_box_scores = box_scores[index]
+        _, number_counts = np.lib.arraysetops.unique(predict_box_classes,
+                                                     return_counts=True)
+        i = 0
+        acummulated = 0
+        for number_count in number_counts:
+            while i < acummulated + number_count:
+                j = i + 1
+                while j < acummulated + number_count:
+                    b_p1 = box_predictions[i]
+                    b_p2 = box_predictions[j]
+                    x_x1 = np.maximum(b_p1[0], b_p2[0])
+                    y_y1 = np.maximum(b_p1[1], b_p2[1])
+                    x_x2 = np.minimum(b_p1[2], b_p2[2])
+                    y_y2 = np.minimum(b_p1[3], b_p2[3])
+                    inter_area = (y_y2 - y_y1) * (x_x2 - x_x1)
+                    box1_area = (b_p1[3] - b_p1[1])*(b_p1[2] - b_p1[0])
+                    box2_area = (b_p2[3] - b_p2[1])*(b_p2[2] - b_p2[0])
+                    union_area = box1_area + box2_area - inter_area
+                    iou = inter_area/union_area
+                    if iou > self.nms_t:
+                        box_predictions = np.delete(box_predictions,
+                                                    j, axis=0)
+                        predict_box_scores = np.delete(predict_box_scores,
+                                                       j, axis=0)
+                        predict_box_classes = np.delete(predict_box_classes,
+                                                        j, axis=0)
+                        number_count -= 1
+                    else:
+                        j += 1
+                i += 1
+            acummulated += number_count
+        return box_predictions, predict_box_classes, predict_box_scores
+    
     @staticmethod
     def load_images(folder_path):
         """Returns a tuple of (images, image_paths)

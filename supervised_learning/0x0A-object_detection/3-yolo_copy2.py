@@ -88,41 +88,35 @@ class Yolo():
         filtered_boxes1 = np.concatenate(filtered_boxes)
         filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
         return filtered_boxes2, filtered_class1, filtered_scores1
-    
-    def iou(self, x1_i, x1_j):
-        return x1_i, x1_j
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """Returns a tuple of
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
-        index = np.lexsort((-box_scores, box_classes))
-        box_predictions = np.array([filtered_boxes[i] for i in index])
-        predict_box_classes = np.array([box_classes[i] for i in index])
-        predict_box_scores = np.array([box_scores[i] for i in index])
-        _, number_counts = np.unique(predict_box_classes,
-                                     return_counts=True)
-        i = 0
-        acummulated = 0
-        for number_count in number_counts:
-            while i < acummulated + number_count:
-                j = i + 1
-                while j < acummulated + number_count:
-                    print("******************")
-                    print(box_predictions[i])
-                    print(box_predictions[j])
-                    print("******************")
-                    temp = self.iou(box_predictions[i], box_predictions[j])
-                    if temp > self.nms_t:
-                        box_predictions = np.delete(box_predictions,
-                                                    j, axis=0)
-                        predict_box_scores = np.delete(predict_box_scores,
-                                                       j, axis=0)
-                        predict_box_classes = np.delete(predict_box_classes,
-                                                        j, axis=0)
-                        number_count -= 1
-                    else:
-                        j += 1
-                i += 1
-            acummulated += number_count
-        return box_predictions, predict_box_classes, predict_box_scores
+        pick = []
+        x1 = filtered_boxes[:,0]
+        y1 = filtered_boxes[:,1]
+        x2 = filtered_boxes[:,2]
+        y2 = filtered_boxes[:,3]
+        area = (x2 - x1 + 1) * (y2 - y1 + 1)
+        idxs = np.lexsort((box_scores, -box_classes))
+        while len(idxs) > 0:
+            last = len(idxs) - 1
+            i = idxs[last]
+            class_check = box_classes[last]
+            pick.append(i)
+            suppress = [last]
+            for pos in range(0, last):
+                j = idxs[pos]
+                xx1 = max(x1[i], x1[j])
+                yy1 = max(y1[i], y1[j])
+                xx2 = min(x2[i], x2[j])
+                yy2 = min(y2[i], y2[j])
+                w = max(0, xx2 - xx1 + 1)
+                h = max(0, yy2 - yy1 + 1)
+                overlap = float(w * h) / (area[i])
+                if overlap > self.nms_t:
+                    suppress.append(pos)
+            suppress1 = [idx for idx in suppress if box_classes[idx] == class_check]
+            idxs = np.delete(idxs, suppress1)
+        return filtered_boxes[pick], box_classes[pick], box_scores[pick]
