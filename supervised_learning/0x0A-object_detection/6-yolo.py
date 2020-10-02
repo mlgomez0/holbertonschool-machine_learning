@@ -101,7 +101,7 @@ class Yolo():
         predClasses = box_classes[idx]
         predScores = box_scores[idx]
         _, counts = np.lib.arraysetops.unique(predClasses,
-                                                     return_counts=True)
+                                              return_counts=True)
         i = 0
         sum_all = 0
         for count in counts:

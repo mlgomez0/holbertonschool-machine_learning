@@ -88,7 +88,7 @@ class Yolo():
         filtered_boxes1 = np.concatenate(filtered_boxes)
         filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
         return filtered_boxes2, filtered_class1, filtered_scores1
-    
+
     def iou(self, x1_i, x1_j):
         return x1_i, x1_j
 
@@ -101,7 +101,7 @@ class Yolo():
         predClasses = box_classes[idx]
         predScores = box_scores[idx]
         _, counts = np.lib.arraysetops.unique(predClasses,
-                                                     return_counts=True)
+                                              return_counts=True)
         i = 0
         sum_all = 0
         for count in counts:
