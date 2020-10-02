@@ -4,6 +4,7 @@ import tensorflow.keras as K
 import numpy as np
 import cv2
 import glob
+import os
 
 
 class Yolo():
@@ -148,3 +149,51 @@ class Yolo():
                            interpolation=cv2.INTER_CUBIC)) / 255
             images_list.append(img_resized)
         return (np.array(images_list), np.array(images_shape))
+
+    def show_boxes(self, image, boxes,
+                   box_classes, box_scores,
+                   file_name):
+        """Displays the image with all
+           boundary boxes, class names,
+           and box scores"""
+        for i in range(len(boxes)):
+            x = int(boxes[i][0])
+            y = int(boxes[i][1])
+            w = int(boxes[i][2])
+            h = int(boxes[i][3])
+            score = str(round(box_scores[i], 2))
+            label = self.class_names[box_classes[i]] + " " + score
+            color = (255, 0, 0)
+            color1 = (0, 0, 255)
+            cv2.rectangle(image, (x, y), (w, h), color, 2)
+            cv2.putText(image, label, (x-5, y-5),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5, color1, 1, cv2.LINE_AA)
+        cv2.imshow(file_name, image)
+        key = cv2.waitKey(0)
+        if not os.path.exists('detections'):
+            os.mkdir("detections")
+        path = "detections"
+        if key == ord('s'):
+            cv2.imwrite(os.path.join(path, file_name), image)
+        cv2.destroyAllWindows()
+
+    def predict(self, folder_path):
+        """give a folder with images, it
+           makes preditions"""
+        list_imgs, image_paths = self.load_images(folder_path)
+        img_list, images_shape = self.preprocess_images(list_imgs)
+        outputs = self.model.predict(img_list)
+        num_grids = len(outputs)
+        predictions = []
+        for i in range(outputs[0].shape[0]):
+            concat_out = []
+            for j in range(num_grids):
+                concat_out.append(outputs[j][i])
+            bx, bx_c, bx_p = self.process_outputs(concat_out, images_shape[i])
+            fb, bc, bs = self.filter_boxes(bx, bx_c, bx_p)
+            boxes, box_class, box_scores = self.non_max_suppression(fb, bc, bs)
+            path = image_paths[i].split("/")[-1]
+            predictions.append((boxes, box_class, box_scores))
+            self.show_boxes(list_imgs[i], boxes, box_class, box_scores, path)
+        return predictions, image_paths
