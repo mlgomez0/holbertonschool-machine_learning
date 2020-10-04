@@ -91,43 +91,49 @@ class Yolo():
         filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
         return filtered_boxes2, filtered_class1, filtered_scores1
 
+    def iou(self, box1, box2):
+        """calculates iou"""
+        x_x1 = np.maximum(box1[0], box2[0])
+        y_y1 = np.maximum(box1[1], box2[1])
+        x_x2 = np.minimum(box1[2], box2[2])
+        y_y2 = np.minimum(box1[3], box2[3])
+        inter_area = (y_y2 - y_y1) * (x_x2 - x_x1)
+        box1_area = (box1[3] - box1[1])*(box1[2] - box1[0])
+        box2_area = (box2[3] - box2[1])*(box2[2] - box2[0])
+        union_area = box1_area + box2_area - inter_area
+        iou = inter_area/union_area
+        return iou
+
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """Returns a tuple of
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
         idx = np.lexsort((-box_scores, box_classes))
-        boxPred = filtered_boxes[idx]
-        predClasses = box_classes[idx]
-        predScores = box_scores[idx]
-        _, counts = np.lib.arraysetops.unique(predClasses,
-                                              return_counts=True)
+        sorted_box_pred = filtered_boxes[idx]
+        sorted_box_class = box_classes[idx]
+        sorted_box_scores = box_scores[idx]
+        _, counts = np.unique(sorted_box_class,
+                              return_counts=True)
         i = 0
-        sum_all = 0
+        n = 0
         for count in counts:
-            while i < sum_all + count:
+            while i < n + count:
                 j = i + 1
-                while j < sum_all + count:
-                    box1 = boxPred[i]
-                    box2 = boxPred[j]
-                    x_x1 = np.maximum(box1[0], box2[0])
-                    y_y1 = np.maximum(box1[1], box2[1])
-                    x_x2 = np.minimum(box1[2], box2[2])
-                    y_y2 = np.minimum(box1[3], box2[3])
-                    inter_area = (y_y2 - y_y1) * (x_x2 - x_x1)
-                    box1_area = (box1[3] - box1[1])*(box1[2] - box1[0])
-                    box2_area = (box2[3] - box2[1])*(box2[2] - box2[0])
-                    union_area = box1_area + box2_area - inter_area
-                    iou = inter_area/union_area
-                    if iou > self.nms_t:
-                        boxPred = np.delete(boxPred, j, axis=0)
-                        predScores = np.delete(predScores, j, axis=0)
-                        predClasses = np.delete(predClasses, j, axis=0)
+                while j < n + count:
+                    temp = self.iou(sorted_box_pred[i], sorted_box_pred[j])
+                    if temp > self.nms_t:
+                        sorted_box_pred = np.delete(sorted_box_pred,
+                                                    j, axis=0)
+                        sorted_box_scores = np.delete(sorted_box_scores,
+                                                      j, axis=0)
+                        sorted_box_class = np.delete(sorted_box_class,
+                                                     j, axis=0)
                         count -= 1
                     else:
                         j += 1
                 i += 1
-            sum_all += count
-        return boxPred, predClasses, predScores
+            n += count
+        return sorted_box_pred, sorted_box_class, sorted_box_scores
 
     @staticmethod
     def load_images(folder_path):
