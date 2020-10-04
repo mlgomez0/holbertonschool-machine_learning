@@ -89,43 +89,34 @@ class Yolo():
         filtered_boxes2 = filtered_boxes1.reshape(-1, 4)
         return filtered_boxes2, filtered_class1, filtered_scores1
 
-    def iou(self, x1_i, x1_j):
-        return x1_i, x1_j
-
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """Returns a tuple of
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
-        idx = np.lexsort((-box_scores, box_classes))
-        boxPred = filtered_boxes[idx]
-        predClasses = box_classes[idx]
-        predScores = box_scores[idx]
-        _, counts = np.lib.arraysetops.unique(predClasses,
-                                              return_counts=True)
-        i = 0
-        sum_all = 0
-        for count in counts:
-            while i < sum_all + count:
-                j = i + 1
-                while j < sum_all + count:
-                    box1 = boxPred[i]
-                    box2 = boxPred[j]
-                    x_x1 = np.maximum(box1[0], box2[0])
-                    y_y1 = np.maximum(box1[1], box2[1])
-                    x_x2 = np.minimum(box1[2], box2[2])
-                    y_y2 = np.minimum(box1[3], box2[3])
-                    inter_area = (y_y2 - y_y1) * (x_x2 - x_x1)
-                    box1_area = (box1[3] - box1[1])*(box1[2] - box1[0])
-                    box2_area = (box2[3] - box2[1])*(box2[2] - box2[0])
-                    union_area = box1_area + box2_area - inter_area
-                    iou = inter_area/union_area
-                    if iou > self.nms_t:
-                        boxPred = np.delete(boxPred, j, axis=0)
-                        predScores = np.delete(predScores, j, axis=0)
-                        predClasses = np.delete(predClasses, j, axis=0)
-                        count -= 1
-                    else:
-                        j += 1
-                i += 1
-            sum_all += count
-        return boxPred, predClasses, predScores
+        pick = []
+        x1 = filtered_boxes[:,0]
+        y1 = filtered_boxes[:,1]
+        x2 = filtered_boxes[:,2]
+        y2 = filtered_boxes[:,3]
+        area = (x2 - x1 + 1) * (y2 - y1 + 1)
+        idxs = np.lexsort((box_scores, -box_classes))
+        while len(idxs) > 0:
+            last = len(idxs) - 1
+            i = idxs[last]
+            class_check = box_classes[last]
+            pick.append(i)
+            suppress = [last]
+            for pos in range(0, last):
+                j = idxs[pos]
+                xx1 = max(x1[i], x1[j])
+                yy1 = max(y1[i], y1[j])
+                xx2 = min(x2[i], x2[j])
+                yy2 = min(y2[i], y2[j])
+                w = max(0, xx2 - xx1 + 1)
+                h = max(0, yy2 - yy1 + 1)
+                overlap = float(w * h) / (area[i])
+                if overlap > self.nms_t:
+                    suppress.append(pos)
+            suppress1 = [idx for idx in suppress if box_classes[idx] == class_check]
+            idxs = np.delete(idxs, suppress1)
+        return filtered_boxes[pick], box_classes[pick], box_scores[pick]
