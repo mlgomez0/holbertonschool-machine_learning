@@ -107,11 +107,18 @@ class Yolo():
            (box_predictions, predicted_box_classes,
             predicted_box_scores)"""
         idx = np.lexsort((-box_scores, box_classes))
+        sorted_box_pred = filtered_boxes[idx]
+        sorted_box_class = box_classes[idx]
+        sorted_box_scores = box_scores[idx]
+        _, counts = np.unique(sorted_box_class,
+                              return_counts=True)
+        """
         sorted_box_pred = np.array([filtered_boxes[i] for i in idx])
         sorted_box_class = np.array([box_classes[i] for i in idx])
         sorted_box_scores = np.array([box_scores[i] for i in idx])
         _, counts = np.unique(sorted_box_class,
                               return_counts=True)
+        """
         i = 0
         n = 0
         for count in counts:
