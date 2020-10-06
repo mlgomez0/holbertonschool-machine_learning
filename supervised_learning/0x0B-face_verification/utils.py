@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import glob
 import os
+import csv
 
 
 def load_images(images_path, as_array=True):
@@ -23,3 +24,12 @@ def load_images(images_path, as_array=True):
     if as_array is True:
         rgb_imgs = np.array(rgb_imgs)
     return rgb_imgs, images_names
+
+
+def load_csv(csv_path, params={}):
+    """loads the contents of a csv
+       file as a list of lists"""
+    with open(csv_path, 'r') as csvfile:
+        csvlist = csv.reader(csvfile)
+        csv_to_listlist = [row for row in csvlist]
+    return csv_to_listlist
